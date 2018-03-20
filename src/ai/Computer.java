@@ -272,6 +272,84 @@ public class Computer {
 			
 			
 		}
+		if(piece == 'P'){
+			
+			endColumnValue = startColumnValue - 1; 
+			endRowValue = startRowValue + 1;
+			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+				board[endColumnValue][endRowValue] = 'P';
+				board[startColumnValue][startRowValue] = '-';
+				move[0] = startColumnValue;
+				move[1] = startRowValue;
+				move[2] = endColumnValue;
+				move[3] = endRowValue;
+				return move;
+			}
+			
+			endColumnValue = startColumnValue + 1; 
+			endRowValue = startRowValue + 1;
+			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+				board[endColumnValue][endRowValue] = 'P';
+				board[startColumnValue][startRowValue] = '-';
+				move[0] = startColumnValue;
+				move[1] = startRowValue;
+				move[2] = endColumnValue;
+				move[3] = endRowValue;
+				return move;
+			}
+			
+			endColumnValue = startColumnValue; 
+			endRowValue = startRowValue;
+			
+			if(legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+				char expPiece = ' ';
+				for(int i = -1; i <= 1; i++){
+					for(int j = -1; j <= 1; j++){
+						if(startColumnValue + i >= 0 && startColumnValue + i <7 && startRowValue + j >= 0 && startRowValue + j < 9){
+							expPiece = board[startColumnValue + i][startRowValue + j];
+							if(expPiece == 'K')
+								explosionNet += -9999;
+							if(expPiece == 'R')
+								explosionNet += -5;
+							if(expPiece == 'B')
+								explosionNet += -4;
+							if(expPiece == 'N')
+								explosionNet += -3;
+							if(expPiece == 'P')
+								explosionNet += -2;
+							if(expPiece == 'k')
+								explosionNet += 9999;
+							if(expPiece == 'r')
+								explosionNet += 5;
+							if(expPiece == 'b')
+								explosionNet += 4;
+							if(expPiece == 'n')
+								explosionNet += 3;
+							if(expPiece == 'p')
+								explosionNet += 2;
+						}
+					
+					}
+				}
+				if(explosionNet >= 2){
+					g.explode(startColumnValue, startRowValue, endColumnValue, endRowValue, expPiece, board);
+					exploded = true;
+				}
+				
+				endColumnValue = startColumnValue; 
+				endRowValue = startRowValue + 1;
+				if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue) && board[endColumnValue][endRowValue] == '-'){
+					board[endColumnValue][endRowValue] = 'N';
+					board[startColumnValue][startRowValue] = '-';
+					move[0] = startColumnValue;
+					move[1] = startRowValue;
+					move[2] = endColumnValue;
+					move[3] = endRowValue;
+					return move;
+				}
+			}
+		}
+		
 		return move;
 	}
 	
