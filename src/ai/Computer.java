@@ -224,10 +224,52 @@ public class Computer {
 				}
 			}
 			
-			
+			endColumnValue = startColumnValue + 1; 
+			endRowValue = startRowValue + 2;
 			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				
+				board[endColumnValue][endRowValue] = 'N';
+				board[startColumnValue][startRowValue] = '-';
+				move[0] = startColumnValue;
+				move[1] = startRowValue;
+				move[2] = endColumnValue;
+				move[3] = endRowValue;
+				return move;
 			}
+			
+			endColumnValue = startColumnValue - 1; 
+			endRowValue = startRowValue + 2;
+			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+				board[endColumnValue][endRowValue] = 'N';
+				board[startColumnValue][startRowValue] = '-';
+				move[0] = startColumnValue;
+				move[1] = startRowValue;
+				move[2] = endColumnValue;
+				move[3] = endRowValue;
+				return move;
+			}
+			endColumnValue = startColumnValue + 2; 
+			endRowValue = startRowValue + 1;
+			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+				board[endColumnValue][endRowValue] = 'N';
+				board[startColumnValue][startRowValue] = '-';
+				move[0] = startColumnValue;
+				move[1] = startRowValue;
+				move[2] = endColumnValue;
+				move[3] = endRowValue;
+				return move;
+			}
+			endColumnValue = startColumnValue - 2; 
+			endRowValue = startRowValue + 1;
+			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+				board[endColumnValue][endRowValue] = 'N';
+				board[startColumnValue][startRowValue] = '-';
+				move[0] = startColumnValue;
+				move[1] = startRowValue;
+				move[2] = endColumnValue;
+				move[3] = endRowValue;
+				return move;
+			}
+			
 			
 		}
 		return move;
