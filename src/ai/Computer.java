@@ -424,6 +424,10 @@ public class Computer {
 
 		}
 
+		if(piece == 'B'){
+			
+		}
+
 		
 		return move;
 	}
