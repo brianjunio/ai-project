@@ -30,6 +30,7 @@ public class Starter {
 				}
 				game.movePiece(moveArray, gameBoard, "human");
 				game.printBoard(gameBoard);
+				game.checkForWinner(gameBoard);
 				//ask for move
 				//check game over
 				//make move
@@ -45,14 +46,6 @@ public class Starter {
 			}
 		}
 		input.close();
-	}
-	
-	
-
-	
-	public static boolean isGameOver(char[][] board){
-		
-		return false;
 	}
 	
 
