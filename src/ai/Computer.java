@@ -103,89 +103,49 @@ public class Computer {
 			endColumnValue = startColumnValue + 1; 
 			endRowValue = startRowValue + 2;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue - 1; 
 			endRowValue = startRowValue + 2;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue + 2; 
 			endRowValue = startRowValue + 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue - 2; 
 			endRowValue = startRowValue + 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue + 2; 
 			endRowValue = startRowValue - 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue - 2; 
 			endRowValue = startRowValue - 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue + 1; 
 			endRowValue = startRowValue - 2;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue - 1; 
 			endRowValue = startRowValue - 2;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			
@@ -213,74 +173,45 @@ public class Computer {
 			endColumnValue = startColumnValue + 1; 
 			endRowValue = startRowValue + 2;
 			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			
 			endColumnValue = startColumnValue - 1; 
 			endRowValue = startRowValue + 2;
 			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue + 2; 
 			endRowValue = startRowValue + 1;
 			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue - 2; 
 			endRowValue = startRowValue + 1;
 			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			
 			
 		}
+		
 		if(piece == 'P'){
 			
 			endColumnValue = startColumnValue - 1; 
 			endRowValue = startRowValue + 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'P';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			
 			endColumnValue = startColumnValue + 1; 
 			endRowValue = startRowValue + 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				board[endColumnValue][endRowValue] = 'P';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			
@@ -306,12 +237,7 @@ public class Computer {
 				endColumnValue = startColumnValue; 
 				endRowValue = startRowValue + 1;
 				if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue) && board[endColumnValue][endRowValue] == '-'){
-					board[endColumnValue][endRowValue] = 'P';
-					board[startColumnValue][startRowValue] = '-';
-					move[0] = startColumnValue;
-					move[1] = startRowValue;
-					move[2] = endColumnValue;
-					move[3] = endRowValue;
+					move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 					return move;
 				}
 			}
@@ -370,12 +296,7 @@ public class Computer {
 
 			//If a piece was captured, execute the move.
 			if(capturedPiece != 0){
-				board[endColumnValue][endRowValue] = 'R';
-				board[startColumnValue][startRowValue] = '-';
-				move[0] = startColumnValue;
-				move[1] = startRowValue;
-				move[2] = endColumnValue;
-				move[3] = endRowValue;
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 
@@ -417,19 +338,30 @@ public class Computer {
 					move[1] = startRowValue;
 					move[2] = endColumnValue;
 					move[3] = endRowValue;
-				}
-				
+				}	
 			}
-			
-
+			if(currentMoveScore != 0){
+				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				return move;
+			}
 		}
 
 		if(piece == 'B'){
-			
-		}
 
-		
+		}
 		return move;
+	}
+
+	public int[] executeMove(char piece, int startColumnValue, int startRowValue, int endColumnValue, int endRowValue, char[][] board){
+		int[] move = new int[4];
+		board[endColumnValue][endRowValue] = piece;
+		board[startColumnValue][startRowValue] = '-';
+		move[0] = startColumnValue;
+		move[1] = startRowValue;
+		move[2] = endColumnValue;
+		move[3] = endRowValue;
+		return move;
+
 	}
 	
 
@@ -476,24 +408,24 @@ public class Computer {
 			
 			/*Individual Piece check*/
 			
-			//Pawn check
 			if(isMoveInBoard && isLegalStartPos && isLegalEndPos){
-					if(piece == 'P'){
-						//Checks if pawns only moves up a row in same column and if there is no piece in front of it
-						if(endColumnValue == startColumnValue && endRowValue == (startRowValue + 1) && board[endColumnValue][endRowValue] == '-'){
-							isLegalPieceMove = true;
-						}
-						
-						//Checks if pawn is making capture move. Checks if its moving to the correct spots and it is not moving to an empty spot or capturing a friendly piece.
-						else if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1) && endRowValue == (startRowValue + 1) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'N'){
-							isLegalPieceMove = true;
-	
-						}
-						//If it fulfills neither requirement, illegal move.
-						else{
-							isLegalPieceMove = false;
-						}
+				
+				if(piece == 'P'){
+					//Checks if pawns only moves up a row in same column and if there is no piece in front of it
+					if(endColumnValue == startColumnValue && endRowValue == (startRowValue + 1) && board[endColumnValue][endRowValue] == '-'){
+						isLegalPieceMove = true;
 					}
+					
+					//Checks if pawn is making capture move. Checks if its moving to the correct spots and it is not moving to an empty spot or capturing a friendly piece.
+					else if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1) && endRowValue == (startRowValue + 1) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'N'){
+						isLegalPieceMove = true;
+
+					}
+					//If it fulfills neither requirement, illegal move.
+					else{
+						isLegalPieceMove = false;
+					}
+				}
 					
 				
 				if(piece == 'N'){
@@ -510,55 +442,52 @@ public class Computer {
 						}
 					
 				}
-				if(piece == 'B'){						
 
-							/*
-							 *  Computer moves made from the human perspective.
-							 */
-							
-							//Moving bottom right to top left
-							if(startRowValue > endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N' && (board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'b')){
-								for(int i = 1; i < startRowValue - endRowValue; i++){
-									if(board[startColumnValue - i][startRowValue + i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-							
-							//Moving bottom left to top right
-							if(startRowValue > endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N' && (board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'b')){
-								for(int i = 1; i < startRowValue - endRowValue; i++){
-									if(board[startColumnValue - i][startRowValue - i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-							
-							//Moving top right to bottom left if it is a capture move
-							if(startRowValue < endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N'){
-								for(int i = 1; i < endRowValue - startRowValue; i++){
-									if(board[startColumnValue - i][startRowValue + i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-							
-							//Moving top left to bottom right
-							if(startRowValue < endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N'){
-								for(int i = 1; i < endRowValue - startRowValue; i++){
-									if(board[startColumnValue + i][startRowValue + i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-												
+				if(piece == 'B'){						
+					
+					//Moving bottom right to top left
+					if(startRowValue > endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N' && (board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'b')){
+						for(int i = 1; i < startRowValue - endRowValue; i++){
+							if(board[startColumnValue - i][startRowValue + i] != '-'){
+								return false;
+							}	
+							isLegalPieceMove = true;
+						}
 					}
 					
+					//Moving bottom left to top right
+					if(startRowValue > endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N' && (board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'b')){
+						for(int i = 1; i < startRowValue - endRowValue; i++){
+							if(board[startColumnValue - i][startRowValue - i] != '-'){
+								return false;
+							}	
+							isLegalPieceMove = true;
+						}
+					}
+					
+					//Moving top right to bottom left if it is a capture move
+					if(startRowValue < endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N'){
+						for(int i = 1; i < endRowValue - startRowValue; i++){
+							if(board[startColumnValue - i][startRowValue + i] != '-'){
+								return false;
+							}	
+							isLegalPieceMove = true;
+						}
+					}
+					
+					//Moving top left to bottom right
+					if(startRowValue < endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N'){
+						for(int i = 1; i < endRowValue - startRowValue; i++){
+							if(board[startColumnValue + i][startRowValue + i] != '-'){
+								return false;
+							}	
+							isLegalPieceMove = true;
+						}
+					}
+											
 				}
+					
+				
 				if(piece == 'R'){
 					//Rook moving forward. Checks if there are any pieces in path. If so, it is an invalid move.
 					
@@ -571,7 +500,6 @@ public class Computer {
 							isLegalPieceMove = true;
 						}
 					}
-					
 					
 					//Rook Moving backward. Checks if there are pieces in path and if it is a capture move. If not, it is an invalid move.
 					if(startColumnValue == endColumnValue && startRowValue < endRowValue && board[endColumnValue][endRowValue] != '-' && (board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'N'))
@@ -607,8 +535,8 @@ public class Computer {
 							}
 						}
 					}
-					
 				}
+				
 				if(piece == 'K'){
 					
 					//Checks if king only moves up a row in same column diagonally forward
@@ -622,7 +550,10 @@ public class Computer {
 				}
 				System.out.println(isLegalPieceMove);
 				return isLegalPieceMove;
+			}
+			return isLegalPieceMove;
 		}	
 			
 	}
+
 
