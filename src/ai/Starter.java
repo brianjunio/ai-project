@@ -10,6 +10,7 @@ public class Starter {
 		Scanner input = new Scanner(System.in);
 		Game game = new Game();
 		Player player = new Player();
+		Computer c = new Computer(game);
 		char[] moveArray = null;
 		
 		System.out.println("Enter 1 to move first or 2 to move second.");
@@ -29,6 +30,9 @@ public class Starter {
 					moveArray = player.RequestMove(input);
 				}
 				game.movePiece(moveArray, gameBoard, "human");
+				game.printBoard(gameBoard);
+				game.checkForWinner(gameBoard);
+				c.makeAMove(gameBoard);
 				game.printBoard(gameBoard);
 				game.checkForWinner(gameBoard);
 				//ask for move
