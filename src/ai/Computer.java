@@ -112,49 +112,49 @@ public class Computer {
 			endColumnValue = startColumnValue + 1; 
 			endRowValue = startRowValue + 2;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue - 1; 
 			endRowValue = startRowValue + 2;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue + 2; 
 			endRowValue = startRowValue + 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue - 2; 
 			endRowValue = startRowValue + 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue + 2; 
 			endRowValue = startRowValue - 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue - 2; 
 			endRowValue = startRowValue - 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue + 1; 
 			endRowValue = startRowValue - 2;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue - 1; 
 			endRowValue = startRowValue - 2;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			
@@ -182,26 +182,26 @@ public class Computer {
 			endColumnValue = startColumnValue + 1; 
 			endRowValue = startRowValue + 2;
 			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			
 			endColumnValue = startColumnValue - 1; 
 			endRowValue = startRowValue + 2;
 			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue + 2; 
 			endRowValue = startRowValue + 1;
 			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			endColumnValue = startColumnValue - 2; 
 			endRowValue = startRowValue + 1;
 			if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			
@@ -213,14 +213,14 @@ public class Computer {
 			endColumnValue = startColumnValue - 1; 
 			endRowValue = startRowValue + 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			
 			endColumnValue = startColumnValue + 1; 
 			endRowValue = startRowValue + 1;
 			if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 			
@@ -246,7 +246,7 @@ public class Computer {
 				endColumnValue = startColumnValue; 
 				endRowValue = startRowValue + 1;
 				if(!exploded && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue) && board[endColumnValue][endRowValue] == '-'){
-					move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+					move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 					return move;
 				}
 			}
@@ -305,7 +305,7 @@ public class Computer {
 
 			//If a piece was captured, execute the move.
 			if(capturedPiece != 0){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 
@@ -350,7 +350,7 @@ public class Computer {
 				}	
 			}
 			if(currentMoveScore != 0){
-				move = executeMove(piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
 		}
@@ -434,17 +434,17 @@ public class Computer {
 
 			if(explosionNet > g.rankPiece(capturedPiece) && explosionNet >= 4){
 				g.explode(startColumnValue, startRowValue, startColumnValue, startRowValue, piece, board);
-				executeMove(piece, startColumnValue, startRowValue, startColumnValue, startRowValue, board);
+				executeMove(move, piece, startColumnValue, startRowValue, startColumnValue, startRowValue, board);
 				return move;
 			}
 			else if(g.rankPiece(capturedPiece) != 0){
-				move = executeMove(piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
 				return move;
 			}
 
 			//make a non-capture move move
 			else{
-				
+
 				for(int i = 1; i <= 6-startColumnValue; i++)
 				{
 					int j1 = startColumnValue + i;
@@ -604,14 +604,14 @@ public class Computer {
 						break;
 					}
 				}
+				executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
 			}
 		}
 		return move;
 	}
 
-	public int[] executeMove(char piece, int startColumnValue, int startRowValue, int endColumnValue, int endRowValue, char[][] board)
+	public int[] executeMove(int[] move, char piece, int startColumnValue, int startRowValue, int endColumnValue, int endRowValue, char[][] board)
 	{
-		int[] move = new int[4];
 		board[endColumnValue][endRowValue] = piece;
 		board[startColumnValue][startRowValue] = '-';
 		move[0] = startColumnValue;
