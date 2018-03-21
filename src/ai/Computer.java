@@ -607,6 +607,10 @@ public class Computer {
 				executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
 			}
 		}
+
+		if(piece == 'K'){
+			
+		}
 		return move;
 	}
 
