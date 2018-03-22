@@ -484,7 +484,7 @@ public class Computer {
 				destroyedPieces = g.explode(startColumnValue, startRowValue, endColumnValue, endRowValue, piece, board);
 				exploded = true;
 			}
-			else if(capturedPiece != ' '){
+			else if(capturedPiece != 0){
 				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
@@ -562,9 +562,10 @@ public class Computer {
 			}
 
 			if(explosionNet >= 2 && explosionNet >= g.rankPiece(capturedPiece)){
-				g.explode(startColumnValue, startRowValue, endColumnValue, endRowValue, piece, board);
+				destroyedPieces = g.explode(startColumnValue, startRowValue, endColumnValue, endRowValue, piece, board);
+				exploded = true;
 			}
-			else if(capturedPiece != ' '){
+			else if(capturedPiece != 0){
 				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
@@ -582,7 +583,6 @@ public class Computer {
 		
 		if(piece == 'R'){
 			//Look forward, check until encounter first enemy piece
-			//for later optimization, choose select piece with higher rank.
 			for(int i = 1; i<= 8-startRowValue; i++){
 				endColumnValue = startColumnValue; 
 				endRowValue = startRowValue + i;
@@ -640,54 +640,59 @@ public class Computer {
 			}
 
 			//If a piece was captured, execute the move.
-			if(capturedPiece != 0){
+			if(explosionNet >= 5 && explosionNet >= g.rankPiece(capturedPiece)){
+				destroyedPieces = g.explode(startColumnValue, startRowValue, endColumnValue, endRowValue, piece, board);
+				exploded = true;
+			}
+			else if(capturedPiece != 0){
 				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				return move;
 			}
-
-			//Move forward and check many pieces you threaten on each spot. Spot with the highest rank is chosen.
-			for(int i = 1; i<= 8-startRowValue; i++){
-				endColumnValue = startColumnValue; 
-				endRowValue = startRowValue + i;
-				if(board[endColumnValue][endRowValue] == '-' && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-					//check left side of row
-					for(int j = 1; j<= 6-startColumnValue; j++){
-						endColumnValue = startColumnValue - i; 
-						endRowValue = startRowValue;
-						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n')){
-							currentMoveScore += g.rankPiece(board[endColumnValue][endRowValue]);
-							break;		
+			else{
+				//Move forward and check many pieces you threaten on each spot. Spot with the highest rank is chosen.
+				for(int i = 1; i<= 8-startRowValue; i++){
+					endColumnValue = startColumnValue; 
+					endRowValue = startRowValue + i;
+					if(board[endColumnValue][endRowValue] == '-' && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+						//check left side of row
+						for(int j = 1; j<= 6-startColumnValue; j++){
+							endColumnValue = startColumnValue - i; 
+							endRowValue = startRowValue;
+							if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n')){
+								currentMoveScore += g.rankPiece(board[endColumnValue][endRowValue]);
+								break;		
+							}
+							if((board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'N')){
+								break;
+							}
+							
 						}
-						if((board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'N')){
-							break;
-						}
-						
+						//check right side of row
+						for(int j = 1; j<= startColumnValue; j++){
+							endColumnValue = startColumnValue - i; 
+							endRowValue = startRowValue;
+							if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n')){
+								currentMoveScore += g.rankPiece(board[endColumnValue][endRowValue]);
+								break;		
+							}
+							if((board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'N')){
+								break;
+							}
+							
+						}	
 					}
-					//check right side of row
-					for(int j = 1; j<= startColumnValue; j++){
-						endColumnValue = startColumnValue - i; 
-						endRowValue = startRowValue;
-						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n')){
-							currentMoveScore += g.rankPiece(board[endColumnValue][endRowValue]);
-							break;		
-						}
-						if((board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'N')){
-							break;
-						}
-						
+					if(currentMoveScore > highestMoveScore){
+						highestMoveScore = currentMoveScore;
+						move[0] = startColumnValue;
+						move[1] = startRowValue;
+						move[2] = endColumnValue;
+						move[3] = endRowValue;
 					}	
 				}
-				if(currentMoveScore > highestMoveScore){
-					highestMoveScore = currentMoveScore;
-					move[0] = startColumnValue;
-					move[1] = startRowValue;
-					move[2] = endColumnValue;
-					move[3] = endRowValue;
-				}	
-			}
-			if(currentMoveScore != 0){
-				move = executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
-				return move;
+				if(currentMoveScore != 0){
+					move = executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
+					return move;
+				}
 			}
 		}
 
@@ -972,7 +977,7 @@ public class Computer {
 			}
 			
 		}
-		
+
 		if(exploded == true){
 			for(int i = 0; i<destroyedPieces.length; i++){
 				move[i+4] = destroyedPieces[i];
