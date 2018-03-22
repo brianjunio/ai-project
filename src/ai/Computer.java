@@ -379,7 +379,7 @@ public class Computer {
 				
 			}
 		}
-		System.out.println("Computer moves " +columnNames[move[0]]+ move[1] + columnNames[newColumn] + newRow);
+		System.out.println("Computer moves " +columnNames[move[0]]+ (move[1] + 1) + columnNames[newColumn] + (newRow+1);
 		board[newColumn][newRow] = bestPiece;
 		board[move[0]][move[1]] = '-';
 	}
