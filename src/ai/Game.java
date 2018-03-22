@@ -95,6 +95,8 @@ public class Game {
 		return result;
 	}
 	
+	
+	
 	public boolean legalMove(char[] move, char[][] board, String player, int startCol, int startRow){
 		boolean isMoveInBoard = false;
 		boolean isLegalStartPos = false;

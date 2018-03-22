@@ -6,7 +6,7 @@ public class Starter {
 
 	public static void main(String[] args) {
 		char[][] gameBoard = new char[7][9];
-		boolean gameEnd = false;
+		int gameEnd = 0;
 		Scanner input = new Scanner(System.in);
 		Game game = new Game();
 		Player player = new Player();
@@ -22,7 +22,7 @@ public class Starter {
 		
 		//Main game loop.
 		if(ans == 1){
-			while(!gameEnd){
+			while(gameEnd == 0){
 				moveArray = player.RequestMove(input);
 				while(!(game.legalMove(moveArray, gameBoard, "human", -1, -1)))
 				{
@@ -42,7 +42,7 @@ public class Starter {
 			}
 		}
 		else{
-			while(!gameEnd){
+			while(gameEnd == 0){
 				//make move
 				//check game over
 				//ask for move
