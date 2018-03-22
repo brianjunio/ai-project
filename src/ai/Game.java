@@ -400,25 +400,25 @@ public class Game {
 	public int rankPiece(char piece){
 		int rank = 0;
 		if(piece == 'K')
-			rank += -9999;
+			rank = -10;
 		else if(piece == 'R')
-			rank += -5;
+			rank = -5;
 		else if(piece == 'B')
-			rank += -4;
+			rank = -4;
 		else if(piece == 'N')
-			rank += -3;
+			rank = -3;
 		else if(piece == 'P')
-			rank += -2;
+			rank = -2;
 		else if(piece == 'k')
-			rank += 9999;
+			rank = 10;
 		else if(piece == 'r')
-			rank += 5;
+			rank = 5;
 		else if(piece == 'b')
-			rank += 4;
+			rank = 4;
 		else if(piece == 'n')
-			rank += 3;
+			rank = 3;
 		else if(piece == 'p')
-			rank += 2;
+			rank = 2;
 		else
 			rank = 0;
 		return rank;

@@ -6,9 +6,205 @@ public class Computer {
 		g = game;
 	}
 	
-	public int evaluateHeuristic(){
+	public int evaluateHeuristic(char[][] board){
+		int value = 0;
+		int endColumnValue = 0;
+		int endRowValue = 0;
 		
-		return 0;
+		for(int startColumnValue = 0; startColumnValue <= 6; startColumnValue++){
+			for(int startRowValue = 0; startRowValue <= 8; startRowValue++){
+				if(board[startColumnValue][startRowValue] == 'P' || board[startColumnValue][startRowValue] == 'N' || board[startColumnValue][startRowValue] == 'B' || board[startColumnValue][startRowValue] == 'R' ){
+					char piece = board[startColumnValue][startRowValue];
+					char expPiece;
+
+					/* Checks the value of doing an explosion on each piece. Adds all those values together. */
+
+					for(int i = -1; i <= 1; i++){
+						for(int j = -1; j <= 1; j++){
+							if(startColumnValue + i >= 0 && startColumnValue + i <7 && startRowValue + j >= 0 && startRowValue + j < 9 && board[startColumnValue + i][startRowValue + j] != '-'){
+								expPiece = board[startColumnValue + i][startRowValue + j];
+								value += g.rankPiece(expPiece);
+							}
+						}
+					}
+
+					/* If a bishop is currently threatening an enemy piece, add that to the total value. */
+					if(piece == 'B')
+					{
+						//moving bottom right
+						for(int i = 1; i <= 6-startColumnValue; i++)
+						{
+							endColumnValue = startColumnValue + i;
+							endRowValue = startRowValue + i;
+							if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+								piece = board[endColumnValue][endRowValue];
+								value += g.rankPiece(piece);
+								break;	
+							}
+						}
+
+						//bottom left
+						for(int i = 1; i<= startColumnValue; i++){
+							endColumnValue = startColumnValue - i; 
+							endRowValue = startRowValue + i;
+							if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+								if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(piece)){
+									piece = board[endColumnValue][endRowValue];
+									value += g.rankPiece(piece);
+									break;	
+								}
+							}
+							
+						}
+
+						//top right
+						for(int i = 1; i<= 6-startColumnValue; i++){
+							endColumnValue = startColumnValue + i; 
+							endRowValue = startRowValue - i;
+							if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+								if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(piece)){
+									piece = board[endColumnValue][endRowValue];
+									value += g.rankPiece(piece);
+
+									break;	
+								}
+							}
+							
+						}
+
+						//top left
+						for(int i = 1; i<= startColumnValue; i++){
+							endColumnValue = startColumnValue - i; 
+							endRowValue = startRowValue + i;
+							if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+								if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(piece)){
+									piece = board[endColumnValue][endRowValue];
+									value += g.rankPiece(piece);
+
+									break;	
+								}
+							}
+						}
+					}
+
+					if(piece == 'P'){
+			
+						endColumnValue = startColumnValue - 1; 
+						endRowValue = startRowValue + 1;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+						}
+						
+						endColumnValue = startColumnValue + 1; 
+						endRowValue = startRowValue + 1;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) && legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+						}
+					}
+
+					if(piece == 'N'){
+						endColumnValue = startColumnValue + 1; 
+						endRowValue = startRowValue + 2;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+
+						}
+						endColumnValue = startColumnValue - 1; 
+						endRowValue = startRowValue + 2;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+
+						}
+						endColumnValue = startColumnValue + 2; 
+						endRowValue = startRowValue + 1;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+
+						}
+						endColumnValue = startColumnValue - 2; 
+						endRowValue = startRowValue + 1;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+
+						}
+						endColumnValue = startColumnValue + 2; 
+						endRowValue = startRowValue - 1;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+
+						}
+						endColumnValue = startColumnValue - 2; 
+						endRowValue = startRowValue - 1;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+
+						}
+						endColumnValue = startColumnValue + 1; 
+						endRowValue = startRowValue - 2;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+
+						}
+						endColumnValue = startColumnValue - 1; 
+						endRowValue = startRowValue - 2;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'r' ) &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+
+						}
+					}
+
+					if(piece == 'R'){
+						//Look forward, check until encounter first enemy piece
+						for(int i = 1; i<= 8-startRowValue; i++){
+							endColumnValue = startColumnValue; 
+							endRowValue = startRowValue + i;
+							if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+								value += g.rankPiece(board[endColumnValue][endRowValue]);
+							}
+							
+						}
+						
+						//Look behind, check until encounter first enemy piece
+						for(int i = 1; i<= startRowValue; i++){
+							endColumnValue = startColumnValue; 
+							endRowValue = startRowValue - i;
+							if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+								value += g.rankPiece(board[endColumnValue][endRowValue]);
+							}
+							
+						}
+			
+						//Look to left, check until encounter with first enemy piece
+						for(int i = 1; i<= startColumnValue; i++){
+							endColumnValue = startColumnValue - i; 
+							endRowValue = startRowValue;
+							if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+								value += g.rankPiece(board[endColumnValue][endRowValue]);
+							}
+							
+						}
+						//Look to right, check until encounter with first enemy piece
+						for(int i = 1; i<= 6-startColumnValue; i++){
+							endColumnValue = startColumnValue + i; 
+							endRowValue = startRowValue;
+							if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+								value += g.rankPiece(board[endColumnValue][endRowValue]);
+							}
+						}
+					}
+
+					if(piece == 'K')
+					{
+						endColumnValue = startColumnValue; 
+						endRowValue = startRowValue + 1;
+						if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+							value += g.rankPiece(board[endColumnValue][endRowValue]);
+						}
+					}
+				}
+			}
+		}
+		return value;
 	}
 	
 	public int min(int depth, char[][] board){
@@ -18,14 +214,13 @@ public class Computer {
 			return -9999;
 		}
 		if(depth == 3){
-			evaluateHeuristic();
+			evaluateHeuristic(board);
 		}
 		for(int col=6; col>=0; col--){
 			for(int row=8; row>=0; row--){
 				if(board[col][row] == 'p' || board[col][row] == 'k' || board[col][row] == 'n' || board[col][row] == 'b' || board[col][row] == 'r' )
 				{
-
-					moveGenerator (board[col][row], board, col, row);
+					moveGenerator(board[col][row], board, col, row);
 				}
 				score = max(depth + 1, board);
 				if(score < bestScore){ 
@@ -43,7 +238,7 @@ public class Computer {
 		if(g.checkForWinner(board) == 1)
 			return 9999;
 		if(depth == 3)
-			return evaluateHeuristic();
+			return evaluateHeuristic(board);
 		for(int col=0; col<7; col++){
 			for(int row=0; row<9; row++){
 				if(board[col][row] == 'P' || board[col][row] == 'K' || board[col][row] == 'N' || board[col][row] == 'B' || board[col][row] == 'R' )
@@ -260,6 +455,8 @@ public class Computer {
 				endRowValue = startRowValue + i;
 				if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
 					capturedPiece = board[endColumnValue][endRowValue];
+					newEndColumnValue = endColumnValue;
+					newEndRowValue = endRowValue;
 					break;	
 				}
 				
@@ -272,6 +469,8 @@ public class Computer {
 				if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
 					if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(capturedPiece)){
 						capturedPiece = board[endColumnValue][endRowValue];
+						newEndColumnValue = endColumnValue;
+						newEndRowValue = endRowValue;
 						break;	
 					}
 				}
@@ -285,6 +484,8 @@ public class Computer {
 				if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
 					if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(capturedPiece)){
 						capturedPiece = board[endColumnValue][endRowValue];
+						newEndColumnValue = endColumnValue;
+						newEndRowValue = endRowValue;
 						break;	
 					}
 				}
@@ -297,6 +498,8 @@ public class Computer {
 				if((board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'b' || board[endColumnValue][endRowValue] == 'n') &&legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
 					if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(capturedPiece)){
 						capturedPiece = board[endColumnValue][endRowValue];
+						newEndColumnValue = endColumnValue;
+						newEndRowValue = endRowValue;
 						break;	
 					}
 				}
@@ -350,7 +553,7 @@ public class Computer {
 				}	
 			}
 			if(currentMoveScore != 0){
-				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
 				return move;
 			}
 		}
@@ -604,12 +807,21 @@ public class Computer {
 						break;
 					}
 				}
-				executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
+				move = executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
 			}
 		}
 
 		if(piece == 'K'){
-			
+			//finish this stuff
+			for(int i = 1; i <= 6 - startColumnValue; i++){
+				endColumnValue = startColumnValue + i;
+				if((board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'n')){
+					break;
+				}
+				if((board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'N')){
+					break;
+				}
+			}
 		}
 		return move;
 	}
