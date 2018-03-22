@@ -426,20 +426,85 @@ public class Game {
 		return rank;
 	}
 	
+	public void restoreExplode(int startColumnValue, int startRowValue, char piece, char[] dPieces, char[][] board){
+		board[startColumnValue][startRowValue] = dPieces[0];
+		if(startColumnValue == 0 && startRowValue != 8 && startRowValue != 0){
+			board[startColumnValue][startRowValue+1]   = dPieces[1];
+			board[startColumnValue][startRowValue-1]   = dPieces[2];
+			board[startColumnValue+1][startRowValue+1] = dPieces[3];
+			board[startColumnValue+1][startRowValue-1] = dPieces[4];
+			board[startColumnValue+1][startRowValue]   = dPieces[5];
+		}
+		else if(startColumnValue == 6 && startRowValue != 8 && startRowValue != 0){
+			board[startColumnValue][startRowValue+1] = dPieces[1];
+			board[startColumnValue][startRowValue-1] = dPieces[2];
+			board[startColumnValue-1][startRowValue+1] = dPieces[3];
+			board[startColumnValue-1][startRowValue-1] = dPieces[4];
+			board[startColumnValue-1][startRowValue] = dPieces[5];
+
+		}
+		else if(startRowValue == 0 && startColumnValue != 0 && startColumnValue != 6){
+			board[startColumnValue][startRowValue+1] = dPieces[1];
+			board[startColumnValue+1][startRowValue+1] = dPieces[2];
+			board[startColumnValue-1][startRowValue+1] = dPieces[3];
+			board[startColumnValue+1][startRowValue] = dPieces[4];
+			board[startColumnValue-1][startRowValue] = dPieces[5];
+		}
+		else if(startRowValue == 0 && startColumnValue == 0){
+			board[startColumnValue][startRowValue+1] = dPieces[1];
+			board[startColumnValue+1][startRowValue+1] = dPieces[2];
+			board[startColumnValue+1][startRowValue] = dPieces[3];
+		}
+		else if(startRowValue == 8 && startColumnValue == 6){
+			board[startColumnValue][startRowValue+1] = dPieces[1];
+			board[startColumnValue-1][startRowValue+1] = dPieces[2];
+			board[startColumnValue-1][startRowValue] = dPieces[3];
+		}
+		else if(startRowValue == 8 && startColumnValue != 0 && startColumnValue != 6){
+			board[startColumnValue][startRowValue-1] = dPieces[1];
+			board[startColumnValue+1][startRowValue-1] = dPieces[2];
+			board[startColumnValue-1][startRowValue-1] = dPieces[3];
+			board[startColumnValue+1][startRowValue] = dPieces[4];
+			board[startColumnValue-1][startRowValue] = dPieces[5];
+		}
+		else if(startRowValue == 8 && startColumnValue == 0){
+			board[startColumnValue][startRowValue-1] = dPieces[1];
+			board[startColumnValue+1][startRowValue-1] = dPieces[2];
+			board[startColumnValue+1][startRowValue] = dPieces[3];
+		}
+		else if(startRowValue == 8 && startColumnValue == 6){
+			board[startColumnValue][startRowValue-1] = dPieces[1];
+			board[startColumnValue-1][startRowValue-1] = dPieces[2];
+			board[startColumnValue-1][startRowValue] = dPieces[3];
+		}
+		else{
+			board[startColumnValue][startRowValue+1] = dPieces[1];
+			board[startColumnValue][startRowValue-1] = dPieces[2];
+			board[startColumnValue+1][startRowValue+1] = dPieces[3];
+			board[startColumnValue+1][startRowValue-1] = dPieces[4];
+			board[startColumnValue+1][startRowValue] = dPieces[5];
+			board[startColumnValue-1][startRowValue] = dPieces[6];
+			board[startColumnValue-1][startRowValue+1] = dPieces[7];
+			board[startColumnValue-1][startRowValue-1] = dPieces[8];
+		}
+		
+	}
+	
+
 	public int[] explode(int startColumnValue, int startRowValue, int endColumnValue, int endRowValue, char piece, char[][] board){
-		int destroyedPieces[] = new int[8];
+		int destroyedPieces[] = new int[9];
 		/*
 		 * Explosions for both human and computer. Returns an array of the pieces destroyed.
 		 */
 		
 		if(startColumnValue == endColumnValue && startRowValue == endRowValue && (piece != 'k' || piece != 'K')){
-			board[startColumnValue][startRowValue] = '-';
+			destroyedPieces[0] = board[startColumnValue][startRowValue] = '-';
 			if(startColumnValue == 0 && startRowValue != 8 && startRowValue != 0){
-				destroyedPieces[0] = board[startColumnValue][startRowValue+1];
-				destroyedPieces[1] = board[startColumnValue][startRowValue-1];
-				destroyedPieces[2] = board[startColumnValue+1][startRowValue+1];
-				destroyedPieces[3] = board[startColumnValue+1][startRowValue-1];
-				destroyedPieces[4] = board[startColumnValue+1][startRowValue]; 
+				destroyedPieces[1] = board[startColumnValue][startRowValue+1];
+				destroyedPieces[2] = board[startColumnValue][startRowValue-1];
+				destroyedPieces[3] = board[startColumnValue+1][startRowValue+1];
+				destroyedPieces[4] = board[startColumnValue+1][startRowValue-1];
+				destroyedPieces[5] = board[startColumnValue+1][startRowValue]; 
 
 				board[startColumnValue][startRowValue+1]   = '-';
 				board[startColumnValue][startRowValue-1]   = '-';
@@ -449,11 +514,11 @@ public class Game {
 
 			}
 			else if(startColumnValue == 6 && startRowValue != 8 && startRowValue != 0){
-				destroyedPieces[0] = board[startColumnValue][startRowValue+1];
-				destroyedPieces[1] = board[startColumnValue][startRowValue-1];
-				destroyedPieces[2] = board[startColumnValue-1][startRowValue+1];
-				destroyedPieces[3] = board[startColumnValue-1][startRowValue-1];
-				destroyedPieces[4] = board[startColumnValue-1][startRowValue]; 
+				destroyedPieces[1] = board[startColumnValue][startRowValue+1];
+				destroyedPieces[2] = board[startColumnValue][startRowValue-1];
+				destroyedPieces[3] = board[startColumnValue-1][startRowValue+1];
+				destroyedPieces[4] = board[startColumnValue-1][startRowValue-1];
+				destroyedPieces[5] = board[startColumnValue-1][startRowValue]; 
 
 				board[startColumnValue][startRowValue+1] = '-';
 				board[startColumnValue][startRowValue-1] = '-';
@@ -463,11 +528,11 @@ public class Game {
 
 			}
 			else if(startRowValue == 0 && startColumnValue != 0 && startColumnValue != 6){
-				destroyedPieces[0] = board[startColumnValue][startRowValue+1];
-				destroyedPieces[1] = board[startColumnValue+1][startRowValue+1];
-				destroyedPieces[2] = board[startColumnValue-1][startRowValue+1];
-				destroyedPieces[3] = board[startColumnValue+1][startRowValue];
-				destroyedPieces[4] = board[startColumnValue-1][startRowValue]; 
+				destroyedPieces[1] = board[startColumnValue][startRowValue+1];
+				destroyedPieces[2] = board[startColumnValue+1][startRowValue+1];
+				destroyedPieces[3] = board[startColumnValue-1][startRowValue+1];
+				destroyedPieces[4] = board[startColumnValue+1][startRowValue];
+				destroyedPieces[5] = board[startColumnValue-1][startRowValue]; 
 
 				board[startColumnValue][startRowValue+1] = '-';
 				board[startColumnValue+1][startRowValue+1] = '-';
@@ -476,29 +541,29 @@ public class Game {
 				board[startColumnValue-1][startRowValue] = '-';
 			}
 			else if(startRowValue == 0 && startColumnValue == 0){
-				destroyedPieces[0] = board[startColumnValue][startRowValue+1];
-				destroyedPieces[1] = board[startColumnValue+1][startRowValue+1];
-				destroyedPieces[2] = board[startColumnValue+1][startRowValue];
+				destroyedPieces[1] = board[startColumnValue][startRowValue+1];
+				destroyedPieces[2] = board[startColumnValue+1][startRowValue+1];
+				destroyedPieces[3] = board[startColumnValue+1][startRowValue];
 
 				board[startColumnValue][startRowValue+1] = '-';
 				board[startColumnValue+1][startRowValue+1] = '-';
 				board[startColumnValue+1][startRowValue] = '-';
 			}
 			else if(startRowValue == 8 && startColumnValue == 6){
-				destroyedPieces[0] = board[startColumnValue][startRowValue+1];
-				destroyedPieces[1] = board[startColumnValue-1][startRowValue+1];
-				destroyedPieces[2] = board[startColumnValue-1][startRowValue];
+				destroyedPieces[1] = board[startColumnValue][startRowValue+1];
+				destroyedPieces[2] = board[startColumnValue-1][startRowValue+1];
+				destroyedPieces[3] = board[startColumnValue-1][startRowValue];
 
 				board[startColumnValue][startRowValue+1] = '-';
 				board[startColumnValue-1][startRowValue+1] = '-';
 				board[startColumnValue-1][startRowValue] = '-';
 			}
 			else if(startRowValue == 8 && startColumnValue != 0 && startColumnValue != 6){
-				destroyedPieces[0] = board[startColumnValue][startRowValue-1];
-				destroyedPieces[1] = board[startColumnValue+1][startRowValue-1];
-				destroyedPieces[2] = board[startColumnValue-1][startRowValue-1];
-				destroyedPieces[3] = board[startColumnValue+1][startRowValue];
-				destroyedPieces[4] = board[startColumnValue-1][startRowValue]; 
+				destroyedPieces[1] = board[startColumnValue][startRowValue-1];
+				destroyedPieces[2] = board[startColumnValue+1][startRowValue-1];
+				destroyedPieces[3] = board[startColumnValue-1][startRowValue-1];
+				destroyedPieces[4] = board[startColumnValue+1][startRowValue];
+				destroyedPieces[5] = board[startColumnValue-1][startRowValue]; 
 
 				board[startColumnValue][startRowValue-1] = '-';
 				board[startColumnValue+1][startRowValue-1] = '-';
@@ -507,32 +572,32 @@ public class Game {
 				board[startColumnValue-1][startRowValue] = '-';
 			}
 			else if(startRowValue == 8 && startColumnValue == 0){
-				destroyedPieces[0] = board[startColumnValue][startRowValue-1];
-				destroyedPieces[1] = board[startColumnValue+1][startRowValue-1];
-				destroyedPieces[2] = board[startColumnValue+1][startRowValue];
+				destroyedPieces[1] = board[startColumnValue][startRowValue-1];
+				destroyedPieces[2] = board[startColumnValue+1][startRowValue-1];
+				destroyedPieces[3] = board[startColumnValue+1][startRowValue];
 
 				board[startColumnValue][startRowValue-1] = '-';
 				board[startColumnValue+1][startRowValue-1] = '-';
 				board[startColumnValue+1][startRowValue] = '-';
 			}
 			else if(startRowValue == 8 && startColumnValue == 6){
-				destroyedPieces[0] = board[startColumnValue][startRowValue-1];
-				destroyedPieces[1] = board[startColumnValue-1][startRowValue-1];
-				destroyedPieces[2] = board[startColumnValue-1][startRowValue];
+				destroyedPieces[1] = board[startColumnValue][startRowValue-1];
+				destroyedPieces[2] = board[startColumnValue-1][startRowValue-1];
+				destroyedPieces[3] = board[startColumnValue-1][startRowValue];
 
 				board[startColumnValue][startRowValue-1] = '-';
 				board[startColumnValue-1][startRowValue-1] = '-';
 				board[startColumnValue-1][startRowValue] = '-';
 			}
 			else{
-				destroyedPieces[0]= board[startColumnValue][startRowValue+1]; 
-				destroyedPieces[1]=board[startColumnValue][startRowValue-1];
-				destroyedPieces[2]=board[startColumnValue+1][startRowValue+1];
-				destroyedPieces[3]=board[startColumnValue+1][startRowValue-1];
-				destroyedPieces[4]=board[startColumnValue+1][startRowValue]; 
-				destroyedPieces[5]=board[startColumnValue-1][startRowValue];
-				destroyedPieces[6]=board[startColumnValue-1][startRowValue+1];
-				destroyedPieces[7]=board[startColumnValue-1][startRowValue-1];
+				destroyedPieces[1]= board[startColumnValue][startRowValue+1]; 
+				destroyedPieces[2]=board[startColumnValue][startRowValue-1];
+				destroyedPieces[3]=board[startColumnValue+1][startRowValue+1];
+				destroyedPieces[4]=board[startColumnValue+1][startRowValue-1];
+				destroyedPieces[5]=board[startColumnValue+1][startRowValue]; 
+				destroyedPieces[6]=board[startColumnValue-1][startRowValue];
+				destroyedPieces[7]=board[startColumnValue-1][startRowValue+1];
+				destroyedPieces[8]=board[startColumnValue-1][startRowValue-1];
 
 				board[startColumnValue][startRowValue+1] = '-';
 				board[startColumnValue][startRowValue-1] = '-';
