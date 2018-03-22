@@ -972,6 +972,13 @@ public class Computer {
 			}
 			
 		}
+		
+		if(exploded == true){
+			for(int i = 0; i<destroyedPieces.length; i++){
+				move[i+4] = destroyedPieces[i];
+			}
+		}
+
 		return move;
 	}
 
