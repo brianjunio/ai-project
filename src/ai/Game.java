@@ -184,7 +184,9 @@ public class Game {
 			}
 			if(piece == 'b'){
 
-				if(startRowValue - endRowValue != startColumnValue - endColumnValue || startRowValue - endRowValue != endColumnValue - startColumnValue)
+				if(startRowValue - endRowValue != startColumnValue - endColumnValue || startRowValue - endRowValue != endColumnValue - startColumnValue){
+					return false;
+				}
 				//Moving forward left
 				if(startRowValue > endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
 					for(int i = 1; i < startRowValue - endRowValue; i++){
