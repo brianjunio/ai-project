@@ -27,9 +27,13 @@ public class Starter {
 			while(gameEnd == 0){
 				moveArray = player.RequestMove(input);
 				piece = gameBoard[moveArray[0]][moveArray[1]];
-				System.out.println(moveArray[0] + " " + moveArray[1] + " " + moveArray[2] + " " + moveArray[3]);
 				isLegalMove = game.legalMove(piece, gameBoard, moveArray[0], moveArray[1], moveArray[2], moveArray[3]);
-				System.out.println(isLegalMove);
+				while(!isLegalMove){
+					System.out.println("Invalid Move.");
+					moveArray = player.RequestMove(input);
+					piece = gameBoard[moveArray[0]][moveArray[1]];
+					isLegalMove = game.legalMove(piece, gameBoard, moveArray[0], moveArray[1], moveArray[2], moveArray[3]);
+				}
 
 				game.movePiece(moveArray, gameBoard, "human");
 				game.printBoard(gameBoard);

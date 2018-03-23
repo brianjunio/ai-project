@@ -9,7 +9,6 @@ public class Game {
 	
 	/*Prints Board*/
 	public void printBoard(char[][] board){
-		System.out.println("In print board");
 		System.out.println();
 		for(int row = 0; row < 9; row++){
 			System.out.print(9 - row + "  ");
@@ -122,7 +121,6 @@ public class Game {
 		else{
 			return false;
 		}
-		System.out.println(isMoveInBoard);
 
 
 
@@ -131,14 +129,12 @@ public class Game {
 		if(Character.isLetter(board[startColumnValue][startRowValue])){
 			isLegalStartPos = true;
 		}
-		System.out.println(isLegalStartPos);
 
 
 		//End position check.
 		if(board[endColumnValue][endRowValue] == '-' || (Character.isLowerCase(board[startColumnValue][startRowValue]) && Character.isUpperCase(board[endColumnValue][endRowValue])) || (Character.isUpperCase(board[startColumnValue][startRowValue]) && Character.isLowerCase(board[endColumnValue][endRowValue]))){
 			isLegalEndPos = true;
 		}
-		System.out.println(isLegalEndPos);
 		
 		//Explosion check
 		if(startColumnValue == endColumnValue && startRowValue == endRowValue && piece != 'K'){
@@ -170,7 +166,6 @@ public class Game {
 		
 			if(piece == 'n'){
 				//Check if knight is moving forward, then it checks if it is not capturing any friendly pieces
-					System.out.println("enter");
 					if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue - 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue -1) && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r'){
 						isLegalPieceMove = true;
 					}
@@ -187,6 +182,7 @@ public class Game {
 				if(startRowValue - endRowValue != startColumnValue - endColumnValue || startRowValue - endRowValue != endColumnValue - startColumnValue){
 					return false;
 				}
+				
 				//Moving forward left
 				if(startRowValue > endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
 					for(int i = 1; i < startRowValue - endRowValue; i++){
@@ -199,7 +195,6 @@ public class Game {
 				
 				//Moving forward right
 				if(startRowValue > endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
-					System.out.println("enter");
 					for(int i = 1; i <= startRowValue - endRowValue; i++){
 						if(board[startColumnValue + i][startRowValue - i] != '-'){
 							return false;

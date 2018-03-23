@@ -2,6 +2,7 @@ package ai;
 
 public class Computer {
 	Game g;
+	int maxDepth = 5;
 	
 	public Computer(Game game){
 		g = game;
@@ -257,15 +258,15 @@ public class Computer {
 		return value;
 	}
 	
-	public int min(int depth, char[][] board){
-		int bestScore = 9999;
-		int score = 0;
+	public int min(int depth, char[][] board, int alpha, int beta){
+		int score = 9999;
+		int newScore;
 		char tranPiece[];
 		char dPieces[] = new char[9];
 		if(g.checkForWinner(board) == -1){
 			return -9999;
 		}
-		if(depth == 3){
+		if(depth == maxDepth){
 			return evaluateHeuristic(board);
 		}
 
@@ -276,9 +277,15 @@ public class Computer {
 				{
 					int move[] = new int[15];
 					move = moveGenerator(board[col][row], board, col, row);
-					score = max(depth + 1, board);
-					if(score < bestScore){ 
-						bestScore = score;
+					newScore = max(depth + 1, board,alpha,beta);
+					if(newScore < score){ 
+						score = newScore;
+					}
+					if(score <= alpha){
+						return score;
+					}
+					if(score < beta){
+						beta = score;
 					}
 
 					tranPiece = Character.toChars(move[13]);
@@ -302,12 +309,12 @@ public class Computer {
 				}
 			}
 		}
-		return bestScore;
+		return score;
 	}
 	
-	public int max(int depth, char[][] board){
-		int bestScore = -9999;
-		int score = 0;
+	public int max(int depth, char[][] board, int alpha, int beta){
+		int score = -9999;
+		int newScore;
 		char tranPiece[];
 		char dPieces[] = new char[9];
 
@@ -315,7 +322,7 @@ public class Computer {
 		if(g.checkForWinner(board) == 1)
 			return 9999;
 
-		if(depth == 3)
+		if(depth == maxDepth)
 			return evaluateHeuristic(board);
 
 		for(int col=0; col<7; col++){
@@ -326,10 +333,16 @@ public class Computer {
 				{
 					int move[] = new int[15];
 					move = moveGenerator(board[col][row], board, col, row);
-					score = min(depth + 1, board);
-					if(score > bestScore)
+					newScore = min(depth + 1, board, alpha, beta);
+					if(score < newScore)
 					{ 
-						bestScore = score;
+						score = newScore;
+					}
+					if(score >= beta){
+						return score;
+					}
+					if(score > alpha){
+						alpha = score;
 					}
 
 					//undo move after score reassign
@@ -354,19 +367,21 @@ public class Computer {
 				}
 			}
 		}
-		return bestScore;
+		return score;
 	}
 	
 	
 	public void makeAMove(char[][] board){
 		char[] columnNames = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
 		char bestPiece = ' ';
-		int bestScore = -9999;
+		int score = -9999;
 		int finalMoveSet[] = new int[4];
 		int depth = 0;
-		int score = -9999;
+		int newScore;
 		char dPieces[] = new char[9];
 		char tranPiece[];
+		int alpha = 9999;
+		int beta = -9999;
 
 		for(int col=0; col<7; col++){
 			for(int row=0; row<9; row++){
@@ -376,9 +391,7 @@ public class Computer {
 					int move[] = new int[15];
 					move = moveGenerator(board[col][row], board, col, row);
 				
-					score = min(depth + 1, board);
-					
-				
+					newScore = min(depth + 1, board, alpha, beta);			
 
 					//undo move after score reassign
 					tranPiece = Character.toChars(move[13]);
@@ -400,12 +413,12 @@ public class Computer {
 						board[move[2]][move[3]] = '-';
 					}
 					
-					if(score > bestScore)
+					if(newScore > score)
 					{ 
 						for(int i = 0; i < finalMoveSet.length; i++){
 							finalMoveSet[i] = move[i];
 						}
-						bestScore = score;
+						score = newScore;
 						bestPiece = board[finalMoveSet[0]][finalMoveSet[1]];
 					}
 				}
@@ -438,7 +451,6 @@ public class Computer {
 	}
 	
 	public int[] moveGenerator (char piece, char[][] board, int startColumnValue, int startRowValue){
-		System.out.println("in move generator");
 		
 		int[] move = new int[15];
 		int[] bestMove = new int[4];
@@ -1187,9 +1199,7 @@ public class Computer {
 					endRowValue = startRowValue - i;
 					int j1 = endColumnValue;
 					int j2 = endRowValue;
-					System.out.println(j1 + " " + j2);
 					if(g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2)){
-						System.out.println(j1 + " " + j2);
 						if(board[j1][endRowValue] == '-'){
 							//check left side of row
 							for(int j = 1; j<= startColumnValue; j++){
@@ -1210,11 +1220,9 @@ public class Computer {
 									break;
 								}
 							}
-							System.out.println(j1 + " " + j2);
 							//check right side of row
 							for(int j = 1; j<= 6- startColumnValue; j++){
 								j1 = endRowValue + j;
-								System.out.println(j1 + " " + j2);
 								if(j1 < 7 && j2 >= 0){ 
 									if(board[j1][j2] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2)){
 										currentMoveScore += g.rankPiece(board[j1][j2]);
@@ -1635,7 +1643,7 @@ public class Computer {
 				}
 			}
 
-			if(capturedPiece > 0){
+			if(capturedPiece != ' ' ){
 				move = executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
 				return move;
 			}
@@ -1670,7 +1678,7 @@ public class Computer {
 				}
 			}
 
-			if(capturedPiece < 0){
+			if(capturedPiece != ' '){
 				move = executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
 				return move;
 			}
