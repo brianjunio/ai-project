@@ -1,7 +1,5 @@
 package ai;
 
-import javax.xml.stream.events.EndDocument;
-
 public class Game {
 	
 	
@@ -11,6 +9,7 @@ public class Game {
 	
 	/*Prints Board*/
 	public void printBoard(char[][] board){
+		System.out.println("In print board");
 		System.out.println();
 		for(int row = 0; row < 9; row++){
 			System.out.print(9 - row + "  ");
@@ -123,6 +122,7 @@ public class Game {
 		else{
 			return false;
 		}
+		System.out.println(isMoveInBoard);
 
 
 
@@ -131,12 +131,14 @@ public class Game {
 		if(Character.isLetter(board[startColumnValue][startRowValue])){
 			isLegalStartPos = true;
 		}
-		
+		System.out.println(isLegalStartPos);
+
+
 		//End position check.
-		if(board[startColumnValue][startRowValue] == '-' || (Character.isLowerCase(board[startColumnValue][startRowValue]) && Character.isUpperCase(board[endColumnValue][endRowValue])) || (Character.isUpperCase(board[startColumnValue][startRowValue]) && Character.isLowerCase(board[endColumnValue][endRowValue]))){
+		if(board[endColumnValue][endRowValue] == '-' || (Character.isLowerCase(board[startColumnValue][startRowValue]) && Character.isUpperCase(board[endColumnValue][endRowValue])) || (Character.isUpperCase(board[startColumnValue][startRowValue]) && Character.isLowerCase(board[endColumnValue][endRowValue]))){
 			isLegalEndPos = true;
 		}
-
+		System.out.println(isLegalEndPos);
 		
 		//Explosion check
 		if(startColumnValue == endColumnValue && startRowValue == endRowValue && piece != 'K'){
@@ -155,7 +157,7 @@ public class Game {
 				}
 				
 				//Checks if pawn is making capture move. Checks if its moving to the correct spots and it is not moving to an empty spot or capturing a friendly piece.
-				else if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1) && endRowValue == (startRowValue - 1) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'n'){
+				else if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1) && endRowValue == (startRowValue - 1) && board[endColumnValue][endRowValue] != '-' && Character.isUpperCase(board[endColumnValue][endRowValue])){
 					isLegalPieceMove = true;
 
 				}
@@ -321,7 +323,11 @@ public class Game {
 			
 			}
 
-			if(piece == 'B'){						
+			if(piece == 'B'){	
+				
+				if(startColumnValue-endColumnValue != startRowValue - endRowValue || startColumnValue-endColumnValue != -(startRowValue - endRowValue)){
+					return false;
+				}
 				
 				//Moving bottom right to top left
 				if(startRowValue > endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N' && (board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'b')){
@@ -427,7 +433,6 @@ public class Game {
 				}
 			}
 		}
-		System.out.println(isLegalPieceMove);
 		return isLegalPieceMove;
 	}
 			
@@ -532,7 +537,8 @@ public class Game {
 		 */
 		
 		if(startColumnValue == endColumnValue && startRowValue == endRowValue && (piece != 'k' || piece != 'K')){
-			destroyedPieces[0] = board[startColumnValue][startRowValue] = '-';
+			destroyedPieces[0] = board[startColumnValue][startRowValue];
+			board[startColumnValue][startRowValue] = '-';
 			if(startColumnValue == 0 && startRowValue != 8 && startRowValue != 0){
 				destroyedPieces[1] = board[startColumnValue][startRowValue+1];
 				destroyedPieces[2] = board[startColumnValue][startRowValue-1];
@@ -648,15 +654,12 @@ public class Game {
 	}
 	
 	
-	public void movePiece(char[] move, char[][] board, String player){		
-		int startColumnValue = move[0] - 'A'; //A-G
-		int startRowValue = move[1] - '1'; //0-9
-		int endColumnValue = move[2] - 'A'; //A-G
-		int endRowValue = move[3] - '1'; //0-9
-		if(player == "human"){
-			startRowValue = 8 - startRowValue;
-			endRowValue = 8 - endRowValue;
-		}		
+	public void movePiece(int[] move, char[][] board, String player){		
+		int startColumnValue = move[0]; 
+		int startRowValue = move[1]; 
+		int endColumnValue = move[2]; 
+		int endRowValue = move[3]; 
+		
 		
 		char piece = board[startColumnValue][startRowValue];
 

@@ -13,6 +13,7 @@ public class Starter {
 		Computer c = new Computer(game);
 		int[] moveArray = null;
 		char piece = ' ';
+		boolean isLegalMove = false;
 		
 		System.out.println("Enter 1 to move first or 2 to move second.");
 		int ans = input.nextInt();
@@ -26,11 +27,11 @@ public class Starter {
 			while(gameEnd == 0){
 				moveArray = player.RequestMove(input);
 				piece = gameBoard[moveArray[0]][moveArray[1]];
-				while(!(game.legalMove(piece, gameBoard, moveArray[0], moveArray[1], moveArray[2], moveArray[3])));
-				{
-					System.out.println("Invalid move.");
-					moveArray = player.RequestMove(input);
-				}
+				System.out.println(moveArray[0] + " " + moveArray[1] + " " + moveArray[2] + " " + moveArray[3]);
+				isLegalMove = game.legalMove(piece, gameBoard, moveArray[0], moveArray[1], moveArray[2], moveArray[3]);
+				System.out.println(isLegalMove);
+
+				System.out.println("out of player move loop");
 				game.movePiece(moveArray, gameBoard, "human");
 				game.printBoard(gameBoard);
 				game.checkForWinner(gameBoard);

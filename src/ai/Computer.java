@@ -29,7 +29,6 @@ public class Computer {
 						}
 					}
 
-					/* If a bishop is currently threatening an enemy piece, add that to the total value. */
 					if(piece == 'B')
 					{
 						//moving bottom right
@@ -261,7 +260,6 @@ public class Computer {
 	public int min(int depth, char[][] board){
 		int bestScore = 9999;
 		int score = 0;
-		int move[] = new int[15];
 		char tranPiece[];
 		char dPieces[] = new char[9];
 		if(g.checkForWinner(board) == -1){
@@ -276,30 +274,31 @@ public class Computer {
 				char piece = board[col][row];
 				if(board[col][row] == 'p' || board[col][row] == 'k' || board[col][row] == 'n' || board[col][row] == 'b' || board[col][row] == 'r' )
 				{
+					int move[] = new int[15];
 					move = moveGenerator(board[col][row], board, col, row);
-				}
-				score = max(depth + 1, board);
-				if(score < bestScore){ 
-					bestScore = score;
-				}
-				
-				tranPiece = Character.toChars(move[13]);
-				//undo move after score reassign
-				if(tranPiece[0] == 'e'){
-					for(int i = 0; i< dPieces.length; i++){
-						tranPiece = Character.toChars(move[i+4]);
-						dPieces[i] = tranPiece[0];
+					score = max(depth + 1, board);
+					if(score < bestScore){ 
+						bestScore = score;
 					}
-					g.restoreExplode(col, row, piece, dPieces, board);
-				}
-				else if(tranPiece[0] == 'c'){
-					tranPiece = Character.toChars(move[14]);
-					board[move[0]][move[1]] = piece;
-					board[move[2]][move[3]] = tranPiece[0];
-				}
-				else{
-					board[move[0]][move[1]] = piece;
-					board[move[2]][move[3]] = '-';
+
+					tranPiece = Character.toChars(move[13]);
+					//undo move after score reassign
+					if(tranPiece[0] == 'e'){
+						for(int i = 0; i< dPieces.length; i++){
+							tranPiece = Character.toChars(move[i+4]);
+							dPieces[i] = tranPiece[0];
+						}
+						g.restoreExplode(col, row, piece, dPieces, board);
+					}
+					else if(tranPiece[0] == 'c'){
+						tranPiece = Character.toChars(move[14]);
+						board[move[0]][move[1]] = piece;
+						board[move[2]][move[3]] = tranPiece[0];
+					}
+					else{
+						board[move[0]][move[1]] = piece;
+						board[move[2]][move[3]] = '-';
+					}
 				}
 			}
 		}
@@ -309,7 +308,6 @@ public class Computer {
 	public int max(int depth, char[][] board){
 		int bestScore = -9999;
 		int score = 0;
-		int move[] = new int[15];
 		char tranPiece[];
 		char dPieces[] = new char[9];
 
@@ -322,37 +320,38 @@ public class Computer {
 
 		for(int col=0; col<7; col++){
 			for(int row=0; row<9; row++){
+				
 				char piece = board[col][row];
 				if(board[col][row] == 'P' || board[col][row] == 'K' || board[col][row] == 'N' || board[col][row] == 'B' || board[col][row] == 'R' )
 				{
+					int move[] = new int[15];
 					move = moveGenerator(board[col][row], board, col, row);
-				}
-				score = min(depth + 1, board);
-				if(score > bestScore)
-				{ 
-					bestScore = score;
-				}
-
-				//undo move after score reassign
-				tranPiece = Character.toChars(move[13]);
-
-				if(tranPiece[0] == 'e'){
-					for(int i = 0; i< dPieces.length; i++){
-						tranPiece = Character.toChars(move[i+4]);
-						dPieces[i] = tranPiece[0];
+					score = min(depth + 1, board);
+					if(score > bestScore)
+					{ 
+						bestScore = score;
 					}
-					g.restoreExplode(col, row, piece, dPieces, board);
-				}
-				else if(tranPiece[0] == 'c'){
-					tranPiece = Character.toChars(move[14]);
-					board[move[0]][move[1]] = piece;
-					board[move[2]][move[3]] = tranPiece[0];
-				}
-				else{
-					board[move[0]][move[1]] = piece;
-					board[move[2]][move[3]] = '-';
-				}
 
+					//undo move after score reassign
+					tranPiece = Character.toChars(move[13]);
+
+					if(tranPiece[0] == 'e'){
+						for(int i = 0; i< dPieces.length; i++){
+							tranPiece = Character.toChars(move[i+4]);
+							dPieces[i] = tranPiece[0];
+						}
+						g.restoreExplode(col, row, piece, dPieces, board);
+					}
+					else if(tranPiece[0] == 'c'){
+						tranPiece = Character.toChars(move[14]);
+						board[move[0]][move[1]] = piece;
+						board[move[2]][move[3]] = tranPiece[0];
+					}
+					else{
+						board[move[0]][move[1]] = piece;
+						board[move[2]][move[3]] = '-';
+					}
+				}
 			}
 		}
 		return bestScore;
@@ -363,33 +362,59 @@ public class Computer {
 		char[] columnNames = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
 		char bestPiece = ' ';
 		int bestScore = -9999;
-		int move[] = new int[15];
-		int newColumn = 0;
-		int newRow = 0;
+		int finalMoveSet[] = new int[4];
 		int depth = 0;
 		int score = -9999;
+		char dPieces[] = new char[9];
+		char tranPiece[];
+
 		for(int col=0; col<7; col++){
 			for(int row=0; row<9; row++){
 				if(board[col][row] == 'P' || board[col][row] == 'K' || board[col][row] == 'N' || board[col][row] == 'B' || board[col][row] == 'R' )
 				{
+					char piece = board[col][row];
+					int move[] = new int[15];
 					move = moveGenerator(board[col][row], board, col, row);
 				
 					score = min(depth + 1, board);
 					
+				
+
+					//undo move after score reassign
+					tranPiece = Character.toChars(move[13]);
+
+					if(tranPiece[0] == 'e'){
+						for(int i = 0; i< dPieces.length; i++){
+							tranPiece = Character.toChars(move[i+4]);
+							dPieces[i] = tranPiece[0];
+						}
+						g.restoreExplode(col, row, piece, dPieces, board);
+					}
+					else if(tranPiece[0] == 'c'){
+						tranPiece = Character.toChars(move[14]);
+						board[move[0]][move[1]] = piece;
+						board[move[2]][move[3]] = tranPiece[0];
+					}
+					else{
+						board[move[0]][move[1]] = piece;
+						board[move[2]][move[3]] = '-';
+					}
+					
 					if(score > bestScore)
 					{ 
-						newColumn = col;
-						newRow = row;
+						for(int i = 0; i < finalMoveSet.length; i++){
+							finalMoveSet[i] = move[i];
+						}
 						bestScore = score;
-						bestPiece = board[col][row];
+						bestPiece = board[finalMoveSet[0]][finalMoveSet[1]];
 					}
 				}
 				
 			}
 		}
-		System.out.println("Computer moves " +columnNames[move[0]]+ (move[1] + 1) + columnNames[newColumn] + (newRow+1));
-		board[newColumn][newRow] = bestPiece;
-		board[move[0]][move[1]] = '-';
+		System.out.println("Computer moves " +columnNames[finalMoveSet[0]]+ (9 -finalMoveSet[1] ) + columnNames[finalMoveSet[2]] + (9-finalMoveSet[3]));
+		board[finalMoveSet[2]][finalMoveSet[3]] = bestPiece;
+		board[finalMoveSet[0]][finalMoveSet[1]] = '-';
 	}
 
 	public int[] assignBestMove(int[] bestMove, int startColumnValue, int startRowValue, int endColumnValue, int endRowValue){
@@ -413,6 +438,8 @@ public class Computer {
 	}
 	
 	public int[] moveGenerator (char piece, char[][] board, int startColumnValue, int startRowValue){
+		System.out.println("in move generator");
+		
 		int[] move = new int[15];
 		int[] bestMove = new int[4];
 		int destroyedPieces[] = new int[8];
@@ -549,7 +576,7 @@ public class Computer {
 				move[13] = 'e';
 				exploded = true;
 			}
-			else if(capturedPiece != 0){
+			else if(capturedPiece != ' ' && g.rankPiece(capturedPiece) < 0){
 				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				move[13] = 'c';
 				move[14] = capturedPiece;
@@ -706,7 +733,7 @@ public class Computer {
 				move[13] = 'e';
 				exploded = true;
 			}
-			else if(capturedPiece != 0){
+			else if(capturedPiece != ' ' && g.rankPiece(capturedPiece) > 0){
 				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				move[13] = 'c';
 				move[14] = capturedPiece;
@@ -787,14 +814,14 @@ public class Computer {
 				move[13] = 'e';
 				exploded = true;
 			}
-			else if(capturedPiece < 0){
+			else if(capturedPiece != ' ' && g.rankPiece(capturedPiece) < 0){
 				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				move[13]='c';
 				move[14]=capturedPiece;
 				return move;
 			}
 			else{
-				if(startRowValue + 1 <= 8){
+				if(startRowValue - 1 >= 0){
 					endColumnValue = startColumnValue; 
 					endRowValue = startRowValue - 1;
 					if(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue) && board[endColumnValue][endRowValue] == '-'){
@@ -850,7 +877,7 @@ public class Computer {
 				move[13] = 'e';
 				exploded = true;
 			}
-			else if(capturedPiece != 0){
+			else if(capturedPiece != ' ' && g.rankPiece(capturedPiece) > 0){
 				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				move[13]='c';
 				move[14]=capturedPiece;
@@ -972,7 +999,7 @@ public class Computer {
 				exploded = true;
 				move[13] = 'e';
 			}
-			else if(capturedPiece != 0){
+			else if(capturedPiece != ' ' && g.rankPiece(capturedPiece) > 0){
 				move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
 				move[14] = capturedPiece;
 				move[13] = 'c';
@@ -1031,85 +1058,102 @@ public class Computer {
 			for(int i = 1; i<= 8-startRowValue; i++){
 				endColumnValue = startColumnValue; 
 				endRowValue = startRowValue - i;
-				if(board[endColumnValue][endRowValue] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-					capturedPiece = board[endColumnValue][endRowValue];
-					newEndColumnValue = endColumnValue;
-					newEndRowValue = endRowValue;
-					break;	
-				}
-				else if(board[endColumnValue][endRowValue] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue))){
-					break;
+				if(endRowValue >= 0){
+					if(board[endColumnValue][endRowValue] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+						capturedPiece = board[endColumnValue][endRowValue];
+						newEndColumnValue = endColumnValue;
+						newEndRowValue = endRowValue;
+						break;	
+					}
+					else if(board[endColumnValue][endRowValue] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue))){
+						break;
+					}
+					else{
+						continue;
+					}
 				}
 				else{
-					continue;
+					break;
 				}
-				
 			}
 			
 			//Look forward until encounter first piece
 			for(int i = 1; i<= startRowValue; i++){
 				endColumnValue = startColumnValue; 
 				endRowValue = startRowValue + i;
-				if(board[endColumnValue][endRowValue] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-					if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(capturedPiece)){
-						capturedPiece = board[endColumnValue][endRowValue];
-						newEndColumnValue = endColumnValue;
-						newEndRowValue = endRowValue;
+				if(endRowValue < 9){
+					if(board[endColumnValue][endRowValue] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+						if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(capturedPiece)){
+							capturedPiece = board[endColumnValue][endRowValue];
+							newEndColumnValue = endColumnValue;
+							newEndRowValue = endRowValue;
+						}
+						break;
+						
 					}
-					break;
-					
-				}
-				else if(board[endColumnValue][endRowValue] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue))){
-					break;
+					else if(board[endColumnValue][endRowValue] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue))){
+						break;
+					}
+					else{
+						continue;
+					}
 				}
 				else{
-					continue;
+					break;
 				}
-				
 			}
 
 			//Look to left until encounter with first piece
 			for(int i = 1; i<= startColumnValue; i++){
 				endColumnValue = startColumnValue - i; 
 				endRowValue = startRowValue;
-				if(board[endColumnValue][endRowValue] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-					if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(capturedPiece)){
-						capturedPiece = board[endColumnValue][endRowValue];
-						newEndColumnValue = endColumnValue;
-						newEndRowValue = endRowValue;
+				if(endColumnValue>= 0){
+					if(board[endColumnValue][endRowValue] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+						if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(capturedPiece)){
+							capturedPiece = board[endColumnValue][endRowValue];
+							newEndColumnValue = endColumnValue;
+							newEndRowValue = endRowValue;
+						}
+						break;
+						
 					}
+					else if(board[endColumnValue][endRowValue] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue))){
+						break;
+					}
+					else{
+						continue;
+					}
+				}
+				else
 					break;
-					
-				}
-				else if(board[endColumnValue][endRowValue] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue))){
-					break;
-				}
-				else{
-					continue;
-				}
-				
 			}
 			//Look to right until encounter with first piece
 			for(int i = 1; i<= 6-startColumnValue; i++){
 				endColumnValue = startColumnValue + i; 
 				endRowValue = startRowValue;
-				if(board[endColumnValue][endRowValue] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-					if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(capturedPiece)){
-						capturedPiece = board[endColumnValue][endRowValue];
-						newEndColumnValue = endColumnValue;
-						newEndRowValue = endRowValue;
+				if(endColumnValue< 9){
+					if(board[endColumnValue][endRowValue] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+						if(g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(capturedPiece)){
+							capturedPiece = board[endColumnValue][endRowValue];
+							newEndColumnValue = endColumnValue;
+							newEndRowValue = endRowValue;
+						}
+						break;
+						
 					}
-					break;
-					
-				}
-				else if(board[endColumnValue][endRowValue] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue))){
-					break;
+					else if(board[endColumnValue][endRowValue] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue))){
+						break;
+					}
+					else{
+						continue;
+					}
 				}
 				else{
-					continue;
+					break;
 				}
-				
 			}
+				
+			
 			
 			if(g.legalMove(piece, board, startColumnValue, startRowValue, startColumnValue, startRowValue)){
 				char expPiece = ' ';
@@ -1130,7 +1174,7 @@ public class Computer {
 				exploded = true;
 				move[13] = 'e';
 			}
-			else if(capturedPiece < 0){
+			else if(capturedPiece != ' ' && g.rankPiece(capturedPiece) < 0){
 				move = executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
 				move[14] = capturedPiece;
 				move[13] = 'c';
@@ -1143,38 +1187,49 @@ public class Computer {
 					endRowValue = startRowValue - i;
 					int j1 = endColumnValue;
 					int j2 = endRowValue;
-
+					System.out.println(j1 + " " + j2);
 					if(g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2)){
+						System.out.println(j1 + " " + j2);
 						if(board[j1][endRowValue] == '-'){
 							//check left side of row
 							for(int j = 1; j<= startColumnValue; j++){
-								j1 -= j; 
-								if(board[j1][j2] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2)){
-									currentMoveScore += g.rankPiece(board[j1][j2]);
-									break;	
-								}
-								else if(board[j1][j2] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2))){
-									break;
+								j1 = endRowValue - j; 
+								if(j1 >= 0 && j2 >= 0){
+									if(board[j1][j2] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2)){
+										currentMoveScore += g.rankPiece(board[j1][j2]);
+										break;	
+									}
+									else if(board[j1][j2] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2))){
+										break;
+									}
+									else{
+										continue;
+									}
 								}
 								else{
-									continue;
+									break;
 								}
-								
 							}
+							System.out.println(j1 + " " + j2);
 							//check right side of row
-							for(int j = 1; j<= startColumnValue; j++){
-								j1 += j; 
-								if(board[j1][j2] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2)){
-									currentMoveScore += g.rankPiece(board[j1][j2]);
-									break;	
-								}
-								else if(board[j1][j2] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2))){
-									break;
+							for(int j = 1; j<= 6- startColumnValue; j++){
+								j1 = endRowValue + j;
+								System.out.println(j1 + " " + j2);
+								if(j1 < 7 && j2 >= 0){ 
+									if(board[j1][j2] != '-' && g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2)){
+										currentMoveScore += g.rankPiece(board[j1][j2]);
+										break;	
+									}
+									else if(board[j1][j2] != '-' && !(g.legalMove(piece, board, startColumnValue, startRowValue, j1, j2))){
+										break;
+									}
+									else{
+										continue;
+									}
 								}
 								else{
-									continue;
+									break;
 								}
-								
 							}	
 						}
 					}
@@ -1191,6 +1246,7 @@ public class Computer {
 				}
 			}
 		}
+		
 
 		if(piece == 'b' || piece == 'B'){
 			
@@ -1536,6 +1592,7 @@ public class Computer {
 				}
 				else{
 					move = executeMove(move, piece, bestMove[0], bestMove[1], bestMove[2], bestMove[3], board);
+					return move;
 				}
 			}
 			else{
@@ -1552,20 +1609,79 @@ public class Computer {
 				}
 				else{
 					move = executeMove(move, piece, bestMove[0], bestMove[1], bestMove[2], bestMove[3], board);
+					return move;
 				}
 			}
 		}
 
 		if(piece == 'K'){
-			//finish this stuff
-			if(startRowValue +1 <= 8){
+			endColumnValue = startColumnValue + 1;
+			endRowValue = startRowValue + 1;
+			if(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+				if(Character.isLowerCase(board[endColumnValue][endRowValue])){
+					capturedPiece = board[endColumnValue][endRowValue];
+					newEndColumnValue = endColumnValue;
+					newEndRowValue = endRowValue;
+				}
+			}
+
+			endColumnValue = startColumnValue - 1;
+			endRowValue = startRowValue + 1;
+			if(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+				if(Character.isLowerCase(board[endColumnValue][endRowValue]) && g.rankPiece(board[endColumnValue][endRowValue]) > g.rankPiece(capturedPiece)){
+					capturedPiece = board[endColumnValue][endRowValue];
+					newEndColumnValue = endColumnValue;
+					newEndRowValue = endRowValue;
+				}
+			}
+
+			if(capturedPiece > 0){
+				move = executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
+				return move;
+			}
+			else{
 				endColumnValue = startColumnValue;
 				endRowValue = startRowValue + 1;
 				if(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
-					executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+					move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+					return move;
 				}
 			}
-			
+		}
+
+		if(piece == 'k'){
+			endColumnValue = startColumnValue + 1;
+			endRowValue = startRowValue - 1;
+			if(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+				if(Character.isUpperCase(board[endColumnValue][endRowValue])){
+					capturedPiece = board[endColumnValue][endRowValue];
+					newEndColumnValue = endColumnValue;
+					newEndRowValue = endRowValue;
+				}
+			}
+
+			endColumnValue = startColumnValue - 1;
+			endRowValue = startRowValue - 1;
+			if(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+				if(Character.isUpperCase(board[endColumnValue][endRowValue]) && g.rankPiece(board[endColumnValue][endRowValue]) < g.rankPiece(capturedPiece)){
+					capturedPiece = board[endColumnValue][endRowValue];
+					newEndColumnValue = endColumnValue;
+					newEndRowValue = endRowValue;
+				}
+			}
+
+			if(capturedPiece < 0){
+				move = executeMove(move, piece, startColumnValue, startRowValue, newEndColumnValue, newEndRowValue, board);
+				return move;
+			}
+			else{
+				endColumnValue = startColumnValue;
+				endRowValue = startRowValue - 1;
+				if(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+					move = executeMove(move, piece, startColumnValue, startRowValue, endColumnValue, endRowValue, board);
+					return move;
+				}
+			}
 		}
 
 		if(exploded == true){
@@ -1576,9 +1692,9 @@ public class Computer {
 
 		return move;
 	}
-
 	
 }
+
 	
 
 	
