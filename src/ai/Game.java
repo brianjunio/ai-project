@@ -1,5 +1,6 @@
 package ai;
 
+import javax.xml.stream.events.EndDocument;
 
 public class Game {
 	
@@ -97,308 +98,341 @@ public class Game {
 	
 	
 	
-	public boolean legalMove(char[] move, char[][] board, String player, int startCol, int startRow){
+	public boolean legalMove(char piece, char[][] board, int startColumnValue, int startRowValue, int endColumnValue, int endRowValue)
+	{
 		boolean isMoveInBoard = false;
 		boolean isLegalStartPos = false;
 		boolean isLegalEndPos = false;
 		boolean isLegalPieceMove = false;
 		boolean explosion = false;
-		char piece = ' ';
 					
-			//If the loop resets, reset the flags//
-			isMoveInBoard = false;
-			isLegalStartPos = false;
-			isLegalEndPos = false;
-			isLegalPieceMove = false;
-			explosion = false;
-			
-			//Requests move, transforms values to array of chars, then places values of the column and row values to variables.//
-			
-			
-			int startColumnValue = move[0] - 'A'; //A-G
-			int startRowValue = move[1] - '1'; //0-9
-			int endColumnValue = move[2] - 'A'; //A-G
-			int endRowValue = move[3] - '1'; //0-9
-			
-			//Do this extra calculation to get the piece from the HUMAN side of the board
-			if(player == "human"){
-				startRowValue = 8 - startRowValue;
-				endRowValue = 8 - endRowValue;
-			}
-			
-			/*
-			 * Grab the piece and put it in this variable.
-			 */
-			piece = board[startColumnValue][startRowValue];
-			System.out.println(startColumnValue + " " +startRowValue);
+		isMoveInBoard = false;
+		isLegalStartPos = false;
+		isLegalEndPos = false;
+		isLegalPieceMove = false;
+		explosion = false;
+		
+		
+		/*
+			*  Determine if the move is within the board's range and using valid characters using ASCII arithmetic. Works for UPPER CASE ONLY.
+			*/
+		
+		if(startColumnValue >= 0 && startColumnValue < 7 && startRowValue >= 0 && startRowValue < 9 && endColumnValue >= 0 && endColumnValue < 7 && endRowValue >= 0 && endRowValue < 9){
+			isMoveInBoard = true;	
+		}
+		else{
+			return false;
+		}
 
-			
-			/*
-			 *  Determine if the move is within the board's range and using valid characters using ASCII arithmetic. Works for UPPER CASE ONLY.
-			 */
-			
-			if('G' - move[0] >= 0 && 'G' - move[0] < 7 && '9' - move[1] >= 0 && '9' - move[1] <= 9 && 'G' - move[2] >= 0 && 'G' - move[2] <= 9 && '9' - move[3] <= 9 && '9' - move[3] >= 0){
-				isMoveInBoard = true;	
+
+
+		//Start position check.
+
+		if(Character.isLetter(board[startColumnValue][startRowValue])){
+			isLegalStartPos = true;
+		}
+		
+		//End position check.
+		if(board[startColumnValue][startRowValue] == '-' || (Character.isLowerCase(board[startColumnValue][startRowValue]) && Character.isUpperCase(board[endColumnValue][endRowValue])) || (Character.isUpperCase(board[startColumnValue][startRowValue]) && Character.isLowerCase(board[endColumnValue][endRowValue]))){
+			isLegalEndPos = true;
+		}
+
+		
+		//Explosion check
+		if(startColumnValue == endColumnValue && startRowValue == endRowValue && piece != 'K'){
+			explosion = true;
+			return explosion;
+		}
+		
+		/*Individual Piece check*/
+		
+		if(isMoveInBoard && isLegalStartPos && isLegalEndPos){
+
+			if(piece == 'p'){
+				//Checks if pawns only moves up a row in same column and if there is no piece in front of it
+				if(endColumnValue == startColumnValue && endRowValue == (startRowValue - 1) && board[endColumnValue][endRowValue] == '-'){
+					isLegalPieceMove = true;
+				}
+				
+				//Checks if pawn is making capture move. Checks if its moving to the correct spots and it is not moving to an empty spot or capturing a friendly piece.
+				else if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1) && endRowValue == (startRowValue - 1) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'n'){
+					isLegalPieceMove = true;
+
+				}
+				//If it fulfills neither requirement, illegal move.
+				else{
+					isLegalPieceMove = false;
+				}
 			}
-			/*
-			 *  Determine if the starting and ending positions are valid for human and computer players.
-			 */
-	
 			
 		
-				/*General Position check*/
-				
-			if(player == "human"){
-				//Start position check.
-				if(board[startColumnValue][startRowValue] != '-' && board[startColumnValue][startRowValue] != 'N' && board[startColumnValue][startRowValue] != 'P' && board[startColumnValue][startRowValue] != 'B' && board[startColumnValue][startRowValue] != 'K' && board[startColumnValue][startRowValue] != 'R'){
-					isLegalStartPos = true;
-				}
-				//End position check.
-				if((board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'n') || (startColumnValue == endColumnValue && startRowValue == endRowValue)){
-					isLegalEndPos = true;
-				}
-			}
-			
-			if(player == "computer"){
-				//Start position check.
-				if(board[startColumnValue][startRowValue] != '-' && board[startColumnValue][startRowValue] != 'n' && board[startColumnValue][startRowValue] != 'p' && board[startColumnValue][startRowValue] != 'b' && board[startColumnValue][startRowValue] != 'k' && board[startColumnValue][startRowValue] != 'r'){
-					isLegalStartPos = true;
-				}
-				//End position check.
-				if((board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N') || (startColumnValue == endColumnValue && startRowValue == endRowValue)){
-					isLegalEndPos = true;
-				}
-			}
-			
-			if(startColumnValue == endColumnValue && startRowValue == endRowValue && (piece != 'k' || piece != 'K')){
-				explosion = true;
-				return explosion;
-			}
-			
-			/*Individual Piece check*/
-			//Pawn check
-			if(isMoveInBoard && isLegalStartPos && isLegalEndPos){
-				piece = board[startColumnValue][startRowValue];
-				if(player == "human"){
-					if(piece == 'p'){
-						//Checks if pawns only moves up a row in same column and if there is no piece in front of it
-						if(endColumnValue == startColumnValue && endRowValue == (startRowValue - 1) && board[endColumnValue][endRowValue] == '-'){
-							isLegalPieceMove = true;
-						}
-						
-						//Checks if pawn is making capture move. Checks if its moving to the correct spots and it is not moving to an empty spot or capturing a friendly piece.
-						else if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1) && endRowValue == (startRowValue - 1) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'n'){
-							isLegalPieceMove = true;
-	
-						}
-						//If it fulfills neither requirement, illegal move.
-						else{
-							isLegalPieceMove = false;
-						}
+			if(piece == 'n'){
+				//Check if knight is moving forward, then it checks if it is not capturing any friendly pieces
+					System.out.println("enter");
+					if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue - 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue -1) && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r'){
+						isLegalPieceMove = true;
 					}
-					if (player=="computer"){
-						//Checks if pawns only moves up a row in same column and if there is no piece in front of it
-						if(endColumnValue == startColumnValue && endRowValue == (startRowValue + 1) && board[endColumnValue][endRowValue] == '-'){
-							isLegalPieceMove = true;
-						}
-						
-						//Checks if pawn is making capture move. Checks if its moving to the correct spots and it is not moving to an empty spot or capturing a friendly piece.
-						else if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1) && endRowValue == (startRowValue + 1) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'N'){
-							isLegalPieceMove = true;
-	
-						}
-						//If it fulfills neither requirement, illegal move.
-						else{
-							isLegalPieceMove = false;
-						}
+					else if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue + 2 ) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue + 2 ) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'n' && (board[endColumnValue][endRowValue] == 'N' || board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'B')){
+						isLegalPieceMove = true;
 					}
-					
-				}
-				if(piece == 'n'){
-					//Check if knight is moving forward, then it checks if it is not capturing any friendly pieces
-					if(player == "human"){
-						System.out.println("enter");
-						if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue - 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue -1) && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r'){
-							isLegalPieceMove = true;
-						}
-						else if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue + 2 ) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue + 2 ) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'n' && (board[endColumnValue][endRowValue] == 'N' || board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'B')){
-							isLegalPieceMove = true;
-						}
-						else{
-							isLegalPieceMove = false;
-						}
-					}
-					if(player == "computer"){
-						if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue - 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue -1) && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r'){
-							isLegalPieceMove = true;
-						}
-						else if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue + 2 ) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue + 2 ) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'n' && (board[endColumnValue][endRowValue] == 'N' || board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'B')){
-							isLegalPieceMove = true;
-						}
-						else{
-							isLegalPieceMove = false;
-						}
-					}
-				}
-				if(piece == 'b'){
-						if(player == "human"){
-							//Moving forward left
-							if(startRowValue > endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
-								for(int i = 1; i < startRowValue - endRowValue; i++){
-									if(board[startColumnValue - i][startRowValue - i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-							
-							//Moving forward right
-							if(startRowValue > endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
-								System.out.println("enter");
-								for(int i = 1; i <= startRowValue - endRowValue; i++){
-									if(board[startColumnValue + i][startRowValue - i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-							
-							//Moving backward left
-							if(startRowValue < endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
-								for(int i = 1; i < endRowValue - startRowValue; i++){
-									if(board[startColumnValue - i][startRowValue + i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-							
-							//Moving backward right
-							if(startRowValue < endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
-								for(int i = 1; i < endRowValue - startRowValue; i++){
-									if(board[startColumnValue + i][startRowValue + i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-						}
-						
-						if(player == "computer")
-						{
-							/*
-							 *  Computer moves made from the human perspective.
-							 */
-							
-							//Moving bottom right to top left
-							if(startRowValue > endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N' && (board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'b')){
-								for(int i = 1; i < startRowValue - endRowValue; i++){
-									if(board[startColumnValue - i][startRowValue + i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-							
-							//Moving bottom left to top right
-							if(startRowValue > endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N' && (board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'b')){
-								for(int i = 1; i < startRowValue - endRowValue; i++){
-									if(board[startColumnValue - i][startRowValue - i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-							
-							//Moving top right to bottom left if it is a capture move
-							if(startRowValue < endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N'){
-								for(int i = 1; i < endRowValue - startRowValue; i++){
-									if(board[startColumnValue - i][startRowValue + i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-							
-							//Moving top left to bottom right
-							if(startRowValue < endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N'){
-								for(int i = 1; i < endRowValue - startRowValue; i++){
-									if(board[startColumnValue + i][startRowValue + i] != '-'){
-										return false;
-									}	
-									isLegalPieceMove = true;
-								}
-							}
-						}						
-					}
-					
-				}
-				if(piece == 'r'){
-					//Rook moving forward. Checks if there are any pieces in path. If so, it is an invalid move.
-					
-					if(player == "human"){
-						if(startColumnValue == endColumnValue && startRowValue > endRowValue && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'N' && board[endColumnValue][endRowValue] != 'B')
-						{
-							for(int i = startRowValue-1; i > endRowValue; i-- ){
-								if(board[startColumnValue][i] != '-'){
-									return false;
-								}		
-								isLegalPieceMove = true;
-							}
-						}
-						
-						
-						//Rook Moving backward. Checks if there are pieces in path and if it is a capture move. If not, it is an invalid move.
-						if(startColumnValue == endColumnValue && startRowValue < endRowValue && board[endColumnValue][endRowValue] != '-' && (board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'N'))
-						{
-							for(int i = startRowValue+1; i < endRowValue; i-- ){
-								if(board[startColumnValue][i] != '-'){
-									return false;
-								}		
-								isLegalPieceMove = true;
-							}
-						}
-						
-						//Rook moving sideways in either direction. Only moves if it is a capture.
-						if(startRowValue == endRowValue && board[endColumnValue][endRowValue] != '-' && (board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'N'))
-						{
-							//Left to right
-							if(startColumnValue < endColumnValue){
-								for(int i = startColumnValue + 1; i < endColumnValue; i++ ){
-									if(board[i][startRowValue] != '-'){
-										return false;
-									}		
-									isLegalPieceMove = true;
-								}
-							}
-							
-							//Right to left
-							if(startColumnValue > endColumnValue){
-								for(int i = startColumnValue - 1; i > endColumnValue; i-- ){
-									if(board[i][startRowValue] != '-'){
-										return false;
-									}		
-									isLegalPieceMove = true;
-								}
-							}
-						}
-					}	
-				}
-				if(piece == 'k'){
-					
-					//Checks if king only moves up a row in same column diagonally forward
-					if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1 || endColumnValue == startColumnValue) && endRowValue == (startRowValue - 1) && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
-						return true;
-					}
-
 					else{
-						return false;
+						isLegalPieceMove = false;
+					}
+				
+			}
+			if(piece == 'b'){
+				//Moving forward left
+				if(startRowValue > endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
+					for(int i = 1; i < startRowValue - endRowValue; i++){
+						if(board[startColumnValue - i][startRowValue - i] != '-'){
+							return false;
+						}	
+						isLegalPieceMove = true;
 					}
 				}
+				
+				//Moving forward right
+				if(startRowValue > endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
+					System.out.println("enter");
+					for(int i = 1; i <= startRowValue - endRowValue; i++){
+						if(board[startColumnValue + i][startRowValue - i] != '-'){
+							return false;
+						}	
+						isLegalPieceMove = true;
+					}
+				}
+				
+				//Moving backward left
+				if(startRowValue < endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
+					for(int i = 1; i < endRowValue - startRowValue; i++){
+						if(board[startColumnValue - i][startRowValue + i] != '-'){
+							return false;
+						}	
+						isLegalPieceMove = true;
+					}
+				}
+				
+				//Moving backward right
+				if(startRowValue < endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
+					for(int i = 1; i < endRowValue - startRowValue; i++){
+						if(board[startColumnValue + i][startRowValue + i] != '-'){
+							return false;
+						}	
+						isLegalPieceMove = true;
+					}
+				}
+										
+			}
+				
+			
+			if(piece == 'r'){
+			//Rook moving forward. Checks if there are any pieces in path. If so, it is an invalid move.
+			
+				if(startColumnValue == endColumnValue && startRowValue > endRowValue && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'N' && board[endColumnValue][endRowValue] != 'B')
+				{
+					for(int i = startRowValue-1; i > endRowValue; i-- ){
+						if(board[startColumnValue][i] != '-'){
+							return false;
+						}		
+						isLegalPieceMove = true;
+					}
+				}
+				
+				
+				//Rook Moving backward. Checks if there are pieces in path and if it is a capture move. If not, it is an invalid move.
+				if(startColumnValue == endColumnValue && startRowValue < endRowValue && board[endColumnValue][endRowValue] != '-' && (board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'N'))
+				{
+					for(int i = startRowValue+1; i < endRowValue; i-- ){
+						if(board[startColumnValue][i] != '-'){
+							return false;
+						}		
+						isLegalPieceMove = true;
+					}
+				}
+				
+				//Rook moving sideways in either direction. Only moves if it is a capture.
+				if(startRowValue == endRowValue && board[endColumnValue][endRowValue] != '-' && (board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'N'))
+				{
+					//Left to right
+					if(startColumnValue < endColumnValue){
+						for(int i = startColumnValue + 1; i < endColumnValue; i++ ){
+							if(board[i][startRowValue] != '-'){
+								return false;
+							}		
+							isLegalPieceMove = true;
+						}
+					}
+					
+					//Right to left
+					if(startColumnValue > endColumnValue){
+						for(int i = startColumnValue - 1; i > endColumnValue; i-- ){
+							if(board[i][startRowValue] != '-'){
+								return false;
+							}		
+							isLegalPieceMove = true;
+						}
+					}
+				}
+				
+			}
+			if(piece == 'k'){
+				
+				//Checks if king only moves up a row in same column diagonally forward
+				if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1 || endColumnValue == startColumnValue) && endRowValue == (startRowValue - 1) && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
+					return true;
+				}
+
+				else{
+					return false;
+				}
+			}
+
+				
+			if(piece == 'P'){
+				//Checks if pawns only moves up a row in same column and if there is no piece in front of it
+				if(endColumnValue == startColumnValue && endRowValue == (startRowValue + 1) && board[endColumnValue][endRowValue] == '-'){
+					isLegalPieceMove = true;
+				}
+				
+				//Checks if pawn is making capture move. Checks if its moving to the correct spots and it is not moving to an empty spot or capturing a friendly piece.
+				else if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1) && endRowValue == (startRowValue + 1) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'N'){
+					isLegalPieceMove = true;
+
+				}
+				//If it fulfills neither requirement, illegal move.
+				else{
+					isLegalPieceMove = false;
+				}
+			}
+					
+				
+			if(piece == 'N'){
+			//Check if knight is moving forward, then it checks if it is not capturing any friendly pieces
+			
+				if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue - 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue -1) && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r'){
+					isLegalPieceMove = true;
+				}
+				else if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue + 2 ) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue + 2 ) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'n' && (board[endColumnValue][endRowValue] == 'N' || board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'B')){
+					isLegalPieceMove = true;
+				}
+				else{
+					isLegalPieceMove = false;
+				}
+			
+			}
+
+			if(piece == 'B'){						
+				
+				//Moving bottom right to top left
+				if(startRowValue > endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N' && (board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'b')){
+					for(int i = 1; i < startRowValue - endRowValue; i++){
+						if(board[startColumnValue - i][startRowValue + i] != '-'){
+							return false;
+						}	
+						isLegalPieceMove = true;
+					}
+				}
+				
+				//Moving bottom left to top right
+				if(startRowValue > endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N' && (board[endColumnValue][endRowValue] == 'p' || board[endColumnValue][endRowValue] == 'r' || board[endColumnValue][endRowValue] == 'k' || board[endColumnValue][endRowValue] == 'n' || board[endColumnValue][endRowValue] == 'b')){
+					for(int i = 1; i < startRowValue - endRowValue; i++){
+						if(board[startColumnValue - i][startRowValue - i] != '-'){
+							return false;
+						}	
+						isLegalPieceMove = true;
+					}
+				}
+				
+				//Moving top right to bottom left if it is a capture move
+				if(startRowValue < endRowValue && startColumnValue > endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N'){
+					for(int i = 1; i < endRowValue - startRowValue; i++){
+						if(board[startColumnValue - i][startRowValue + i] != '-'){
+							return false;
+						}	
+						isLegalPieceMove = true;
+					}
+				}
+				
+				//Moving top left to bottom right
+				if(startRowValue < endRowValue && startColumnValue < endColumnValue && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'B' && board[endColumnValue][endRowValue] != 'N'){
+					for(int i = 1; i < endRowValue - startRowValue; i++){
+						if(board[startColumnValue + i][startRowValue + i] != '-'){
+							return false;
+						}	
+						isLegalPieceMove = true;
+					}
+				}
+										
+			}
+					
+				
+			if(piece == 'R'){
+				//Rook moving forward. Checks if there are any pieces in path. If so, it is an invalid move.
+				
+				if(startColumnValue == endColumnValue && startRowValue > endRowValue && board[endColumnValue][endRowValue] != 'P' && board[endColumnValue][endRowValue] != 'R' && board[endColumnValue][endRowValue] != 'K' && board[endColumnValue][endRowValue] != 'N' && board[endColumnValue][endRowValue] != 'B')
+				{
+					for(int i = startRowValue-1; i > endRowValue; i-- ){
+						if(board[startColumnValue][i] != '-'){
+							return false;
+						}		
+						isLegalPieceMove = true;
+					}
+				}
+				
+				//Rook Moving backward. Checks if there are pieces in path and if it is a capture move. If not, it is an invalid move.
+				if(startColumnValue == endColumnValue && startRowValue < endRowValue && board[endColumnValue][endRowValue] != '-' && (board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'N'))
+				{
+					for(int i = startRowValue+1; i < endRowValue; i-- ){
+						if(board[startColumnValue][i] != '-'){
+							return false;
+						}		
+						isLegalPieceMove = true;
+					}
+				}
+				
+				//Rook moving sideways in either direction. Only moves if it is a capture.
+				if(startRowValue == endRowValue && board[endColumnValue][endRowValue] != '-' && (board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'B' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'N'))
+				{
+					//Left to right
+					if(startColumnValue < endColumnValue){
+						for(int i = startColumnValue + 1; i < endColumnValue; i++ ){
+							if(board[i][startRowValue] != '-'){
+								return false;
+							}		
+							isLegalPieceMove = true;
+						}
+					}
+					
+					//Right to left
+					if(startColumnValue > endColumnValue){
+						for(int i = startColumnValue - 1; i > endColumnValue; i-- ){
+							if(board[i][startRowValue] != '-'){
+								return false;
+							}		
+							isLegalPieceMove = true;
+						}
+					}
+				}
+			}
+				
+			if(piece == 'K'){
+				
+				//Checks if king only moves up a row in same column diagonally forward
+				if((endColumnValue == startColumnValue + 1 || endColumnValue == startColumnValue - 1 || endColumnValue == startColumnValue) && endRowValue == (startRowValue - 1) && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b'){
+					return true;
+				}
+
+				else{
+					return false;
+				}
+			}
+		}
 		System.out.println(isLegalPieceMove);
 		return isLegalPieceMove;
-	}	
-	
+	}
+			
+			
+		
 	public int rankPiece(char piece){
 		int rank = 0;
 		if(piece == 'K')
@@ -639,10 +673,7 @@ public class Game {
 				board[endColumnValue][endRowValue] = 'p';
 				board[startColumnValue][startRowValue] = '-';
 			}
-			if (player=="computer"){
-				board[endColumnValue][endRowValue] = 'P';
-				board[startColumnValue][startRowValue] = '-';
-			}
+
 		}
 		
 		//Knight check
@@ -652,10 +683,7 @@ public class Game {
 				board[endColumnValue][endRowValue] = 'n';
 				board[startColumnValue][startRowValue] = '-';
 			}
-			if(player == "computer"){
-				board[endColumnValue][endRowValue] = 'N';
-				board[startColumnValue][startRowValue] = '-';
-			}
+
 		}
 		
 		//Bishop check
@@ -664,12 +692,7 @@ public class Game {
 				board[endColumnValue][endRowValue] = 'b';
 				board[startColumnValue][startRowValue] = '-';
 			}
-			
-			if(player == "computer")
-			{
-				board[endColumnValue][endRowValue] = 'B';
-				board[startColumnValue][startRowValue] = '-';
-			}
+
 				
 		}
 			
@@ -680,22 +703,12 @@ public class Game {
 				board[endColumnValue][endRowValue] = 'r';
 				board[startColumnValue][startRowValue] = '-';
 			}
-			
-			if(player == "computer"){
-				board[endColumnValue][endRowValue] = 'R';
-				board[startColumnValue][startRowValue] = '-';
-			}
 		}
 		
 		//King check
 		if(piece == 'k'){
 			if(player == "human"){
 				board[endColumnValue][endRowValue] = 'k';
-				board[startColumnValue][startRowValue] = '-';
-			}
-			
-			if(player == "computer"){
-				board[endColumnValue][endRowValue] = 'K';
 				board[startColumnValue][startRowValue] = '-';
 			}
 		}		

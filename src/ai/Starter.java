@@ -11,7 +11,8 @@ public class Starter {
 		Game game = new Game();
 		Player player = new Player();
 		Computer c = new Computer(game);
-		char[] moveArray = null;
+		int[] moveArray = null;
+		char piece = ' ';
 		
 		System.out.println("Enter 1 to move first or 2 to move second.");
 		int ans = input.nextInt();
@@ -24,7 +25,8 @@ public class Starter {
 		if(ans == 1){
 			while(gameEnd == 0){
 				moveArray = player.RequestMove(input);
-				while(!(game.legalMove(moveArray, gameBoard, "human", -1, -1)))
+				piece = gameBoard[moveArray[0]][moveArray[1]];
+				while(!(game.legalMove(piece, gameBoard, moveArray[0], moveArray[1], moveArray[2], moveArray[3])));
 				{
 					System.out.println("Invalid move.");
 					moveArray = player.RequestMove(input);
