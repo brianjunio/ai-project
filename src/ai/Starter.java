@@ -31,13 +31,16 @@ public class Starter {
 				isLegalMove = game.legalMove(piece, gameBoard, moveArray[0], moveArray[1], moveArray[2], moveArray[3]);
 				System.out.println(isLegalMove);
 
-				System.out.println("out of player move loop");
 				game.movePiece(moveArray, gameBoard, "human");
 				game.printBoard(gameBoard);
-				game.checkForWinner(gameBoard);
+				if(game.checkForWinner(gameBoard) != 0){
+					gameEnd = game.checkForWinner(gameBoard);
+				}				
 				c.makeAMove(gameBoard);
 				game.printBoard(gameBoard);
-				game.checkForWinner(gameBoard);
+				if(game.checkForWinner(gameBoard) != 0){
+					gameEnd = game.checkForWinner(gameBoard);
+				}
 				//ask for move
 				//check game over
 				//make move
@@ -51,6 +54,13 @@ public class Starter {
 				//ask for move
 				//check game over
 			}
+		}
+
+		if(gameEnd == -1){
+			System.out.println("Human wins!");
+		}
+		else{
+			System.out.println("Computer wins!");
 		}
 		input.close();
 	}
