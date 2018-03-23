@@ -278,15 +278,6 @@ public class Computer {
 					int move[] = new int[15];
 					move = moveGenerator(board[col][row], board, col, row);
 					newScore = max(depth + 1, board,alpha,beta);
-					if(newScore < score){ 
-						score = newScore;
-					}
-					if(score <= alpha){
-						return score;
-					}
-					if(score < beta){
-						beta = score;
-					}
 
 					tranPiece = Character.toChars(move[13]);
 					//undo move after score reassign
@@ -305,6 +296,16 @@ public class Computer {
 					else{
 						board[move[0]][move[1]] = piece;
 						board[move[2]][move[3]] = '-';
+					}
+
+					if(newScore < score){ 
+						score = newScore;
+					}
+					if(score <= alpha){
+						return score;
+					}
+					if(score < beta){
+						beta = score;
 					}
 				}
 			}
@@ -334,18 +335,7 @@ public class Computer {
 					int move[] = new int[15];
 					move = moveGenerator(board[col][row], board, col, row);
 					newScore = min(depth + 1, board, alpha, beta);
-					if(score < newScore)
-					{ 
-						score = newScore;
-					}
-					if(score >= beta){
-						return score;
-					}
-					if(score > alpha){
-						alpha = score;
-					}
 
-					//undo move after score reassign
 					tranPiece = Character.toChars(move[13]);
 
 					if(tranPiece[0] == 'e'){
@@ -364,6 +354,17 @@ public class Computer {
 						board[move[0]][move[1]] = piece;
 						board[move[2]][move[3]] = '-';
 					}
+
+					if(score < newScore)
+					{ 
+						score = newScore;
+					}
+					if(score >= beta){
+						return score;
+					}
+					if(score > alpha){
+						alpha = score;
+					}					
 				}
 			}
 		}
@@ -419,7 +420,7 @@ public class Computer {
 							finalMoveSet[i] = move[i];
 						}
 						score = newScore;
-						bestPiece = board[finalMoveSet[0]][finalMoveSet[1]];
+						bestPiece = piece;
 					}
 				}
 				

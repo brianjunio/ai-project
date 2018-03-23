@@ -22,7 +22,8 @@ public class Starter {
 		game.populateBoard(gameBoard);
 		game.printBoard(gameBoard);
 		
-		//Main game loop.
+		//Main game loop
+		
 		if(ans == 1){
 			while(gameEnd == 0){
 				moveArray = player.RequestMove(input);
@@ -39,24 +40,41 @@ public class Starter {
 				game.printBoard(gameBoard);
 				if(game.checkForWinner(gameBoard) != 0){
 					gameEnd = game.checkForWinner(gameBoard);
+					break;
 				}				
 				c.makeAMove(gameBoard);
 				game.printBoard(gameBoard);
 				if(game.checkForWinner(gameBoard) != 0){
 					gameEnd = game.checkForWinner(gameBoard);
+					break;
 				}
-				//ask for move
-				//check game over
-				//make move
-				//check game over
+				
 			}
 		}
 		else{
 			while(gameEnd == 0){
-				//make move
-				//check game over
-				//ask for move
-				//check game over
+				c.makeAMove(gameBoard);
+				game.printBoard(gameBoard);
+				if(game.checkForWinner(gameBoard) != 0){
+					gameEnd = game.checkForWinner(gameBoard);
+					break;
+				}
+				moveArray = player.RequestMove(input);
+				piece = gameBoard[moveArray[0]][moveArray[1]];
+				isLegalMove = game.legalMove(piece, gameBoard, moveArray[0], moveArray[1], moveArray[2], moveArray[3]);
+				while(!isLegalMove){
+					System.out.println("Invalid Move.");
+					moveArray = player.RequestMove(input);
+					piece = gameBoard[moveArray[0]][moveArray[1]];
+					isLegalMove = game.legalMove(piece, gameBoard, moveArray[0], moveArray[1], moveArray[2], moveArray[3]);
+				}
+
+				game.movePiece(moveArray, gameBoard, "human");
+				game.printBoard(gameBoard);
+				if(game.checkForWinner(gameBoard) != 0){
+					gameEnd = game.checkForWinner(gameBoard);
+					break;
+				}				
 			}
 		}
 
