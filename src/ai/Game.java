@@ -165,11 +165,12 @@ public class Game {
 			
 		
 			if(piece == 'n'){
-				//Check if knight is moving forward, then it checks if it is not capturing any friendly pieces
-					if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue - 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue -1) && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'n' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r'){
+					//Check if knight is moving forward, then it checks if it is not capturing any friendly pieces
+					if(((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue - 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue - 2) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue -1)) && !Character.isLowerCase(board[endColumnValue][endRowValue])){
 						isLegalPieceMove = true;
 					}
-					else if((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue + 2 ) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue + 2 ) && board[endColumnValue][endRowValue] != '-' && board[endColumnValue][endRowValue] != 'p' && board[endColumnValue][endRowValue] != 'k' && board[endColumnValue][endRowValue] != 'r' && board[endColumnValue][endRowValue] != 'b' && board[endColumnValue][endRowValue] != 'n' && (board[endColumnValue][endRowValue] == 'N' || board[endColumnValue][endRowValue] == 'P' || board[endColumnValue][endRowValue] == 'R' || board[endColumnValue][endRowValue] == 'K' || board[endColumnValue][endRowValue] == 'B')){
+					//backward movement check. must be a capture move.
+					else if(((endColumnValue == startColumnValue + 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue + 1 && endRowValue == startRowValue + 2 ) || (endColumnValue == startColumnValue - 2 && endRowValue == startRowValue + 1 ) || (endColumnValue == startColumnValue - 1 && endRowValue == startRowValue + 2 )) && Character.isLetter(board[endColumnValue][endRowValue]) && Character.isUpperCase(board[endColumnValue][endRowValue])){
 						isLegalPieceMove = true;
 					}
 					else{

@@ -281,6 +281,7 @@ public class Computer {
 
 					tranPiece = Character.toChars(move[13]);
 					//undo move after score reassign
+
 					if(tranPiece[0] == 'e'){
 						for(int i = 0; i< dPieces.length; i++){
 							tranPiece = Character.toChars(move[i+4]);
@@ -869,10 +870,8 @@ public class Computer {
 				}
 			}
 			
-			endColumnValue = startColumnValue; 
-			endRowValue = startRowValue;
 			
-			if(g.legalMove(piece, board, startColumnValue, startRowValue, endColumnValue, endRowValue)){
+			if(g.legalMove(piece, board, startColumnValue, startRowValue, startColumnValue, startRowValue)){
 				char expPiece = ' ';
 				for(int i = -1; i <= 1; i++){
 					for(int j = -1; j <= 1; j++){
