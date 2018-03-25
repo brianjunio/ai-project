@@ -27,7 +27,9 @@ public class Starter {
 		if(ans == 1){
 			while(gameEnd == 0){
 				moveArray = player.RequestMove(input);
+				
 				piece = gameBoard[moveArray[0]][moveArray[1]];
+				
 				isLegalMove = game.legalMove(piece, gameBoard, moveArray[0], moveArray[1], moveArray[2], moveArray[3]);
 				while(!isLegalMove){
 					System.out.println("Invalid Move.");

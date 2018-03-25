@@ -2,7 +2,7 @@ package ai;
 
 public class Computer {
 	Game g;
-	int maxDepth = 5;
+	int maxDepth = 7;
 	
 	public Computer(Game game){
 		g = game;
@@ -427,7 +427,7 @@ public class Computer {
 				
 			}
 		}
-		System.out.println("Computer moves " +columnNames[finalMoveSet[0]]+ (9 -finalMoveSet[1] ) + columnNames[finalMoveSet[2]] + (9-finalMoveSet[3]));
+		System.out.println("Computer moves " +columnNames[finalMoveSet[0]]+ (9 -finalMoveSet[1] ) + columnNames[finalMoveSet[2]] + (9-finalMoveSet[3]) + " (" + columnNames[6-finalMoveSet[0]] +  finalMoveSet[1] + columnNames[6-finalMoveSet[2]] + finalMoveSet[3] + ")");
 		board[finalMoveSet[2]][finalMoveSet[3]] = bestPiece;
 		board[finalMoveSet[0]][finalMoveSet[1]] = '-';
 	}
